@@ -1,5 +1,6 @@
+import 'package:blended_learning_appmb/features/personalization/screens/screens/settings/settings.dart';
 import 'package:blended_learning_appmb/features/question/screens/chat/chat.dart';
-import 'package:blended_learning_appmb/features/question/screens/classes/home.dart';
+import 'package:blended_learning_appmb/features/question/screens/classes/classes.dart';
 import 'package:blended_learning_appmb/features/question/screens/q&a/question.dart';
 import 'package:blended_learning_appmb/features/question/screens/rank/rank.dart';
 import 'package:blended_learning_appmb/utils/constants/colors.dart';
@@ -50,8 +51,6 @@ class NavigationController extends GetxController {
     const ClassesScreen(),
     const RankScreen(),
     const ChatScreen(),
-    Container(
-      color: Colors.amber,
-    )
+    const SettingsScreen()
   ];
 }

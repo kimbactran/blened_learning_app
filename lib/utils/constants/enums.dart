@@ -14,3 +14,5 @@ enum PaymentMethods {
   zalopay,
   vnqr
 }
+
+enum Role { admin, teacher, student }

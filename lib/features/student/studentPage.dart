@@ -11,7 +11,7 @@ class _StudentPageState extends State<StudentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Student Page")),
+      appBar: AppBar(title: const Text("Student Page")),
     );
   }
 }

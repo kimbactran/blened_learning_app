@@ -3,6 +3,7 @@ class LImages {
   static const String darkAppLogo = "assets/logos/logo.png";
   static const String lightAppLogo = "assets/logos/logo.png";
   static const String logo = "assets/logos/logo.png";
+  static const String logoWithoutText = "assets/logos/logo_without_text.png";
 
   // Social logo
   static const String facebook = "assets/logos/facebook_logo.png";
@@ -82,4 +83,9 @@ class LImages {
   // Success
   static const String successPayment =
       "assets/images/success_image/payment_success.png";
+
+  /// Class
+  static const String classImage = "assets/images/class/class_image.png";
+  static const String classImage1 = "assets/images/class/class_images_1.png";
+  static const String classImage2 = "assets/images/class/class_images_2.png";
 }

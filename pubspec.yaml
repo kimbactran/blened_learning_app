@@ -39,6 +39,8 @@ dependencies:
   url_launcher: ^6.2.4
   flutter_native_splash: ^2.3.10
   smooth_page_indicator: ^1.1.0
+  flutter_simple_treeview: ^3.0.2
+  comment_box: ^0.0.18
 
   # Icons
   iconsax: ^0.0.8
@@ -79,6 +81,7 @@ flutter:
     - assets/icons/
     - assets/logos/
     - assets/images/login_images/
+    - assets/images/class/
 
 
   fonts:

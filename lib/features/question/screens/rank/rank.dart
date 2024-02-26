@@ -1,7 +1,5 @@
 import 'package:blended_learning_appmb/common/widgets/appbar/appbar.dart';
-import 'package:blended_learning_appmb/common/widgets/icons/circular_icon.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 
 class RankScreen extends StatelessWidget {
   const RankScreen({super.key});
@@ -14,6 +12,7 @@ class RankScreen extends StatelessWidget {
             child:
                 Text('Rank', style: Theme.of(context).textTheme.headlineSmall)),
       ),
+      body: const SingleChildScrollView(),
     );
   }
 }

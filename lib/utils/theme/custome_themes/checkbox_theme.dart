@@ -1,3 +1,4 @@
+import 'package:blended_learning_appmb/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class LCheckboxTheme {
@@ -14,7 +15,7 @@ class LCheckboxTheme {
     }),
     fillColor: MaterialStateColor.resolveWith((states) {
       if (states.contains(MaterialState.selected)) {
-        return Colors.blue;
+        return LColors.primary1;
       } else {
         return Colors.transparent;
       }
@@ -32,7 +33,7 @@ class LCheckboxTheme {
     }),
     fillColor: MaterialStateColor.resolveWith((states) {
       if (states.contains(MaterialState.selected)) {
-        return Colors.purple;
+        return LColors.primary1;
       } else {
         return Colors.transparent;
       }

@@ -33,10 +33,10 @@ class _AdminPageState extends State<AdminPage> {
         selectedIndex: currentPageIndex,
       ),
       body: <Widget>[
-        DashBoardPage(),
-        ClassManagerPage(),
-        UserManagerPage(),
-        ProfilePage()
+        const DashBoardPage(),
+        const ClassManagerPage(),
+        const UserManagerPage(),
+        const ProfilePage()
       ][currentPageIndex],
     );
   }

@@ -37,11 +37,11 @@ class LoginController extends GetxController {
         emailController.clear();
         passwordController.clear();
         if (json['user']['role'] == 'ADMIN') {
-          Get.off(AdminPage());
+          Get.off(const AdminPage());
         } else if (json['user']['role'] == 'TEACHER') {
-          Get.off(TeacherPage());
+          Get.off(const TeacherPage());
         } else if (json['user']['role'] == 'STUDENT') {
-          Get.off(StudentPage());
+          Get.off(const StudentPage());
         } else
           print("Unable to determine the logged in user's role!");
         print('Login successfully');
@@ -54,8 +54,8 @@ class LoginController extends GetxController {
           context: Get.context!,
           builder: (context) {
             return SimpleDialog(
-              title: Text('Error'),
-              contentPadding: EdgeInsets.all(20),
+              title: const Text('Error'),
+              contentPadding: const EdgeInsets.all(20),
               children: [Text(error.toString())],
             );
           });

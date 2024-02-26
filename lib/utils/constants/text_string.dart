@@ -45,7 +45,7 @@ class LTexts {
   // --- Authentication Headings Text
   static const String loginTitle = "Welcome back,";
   static const String loginSubtitle =
-      "Discover Limitless Choices and Unmatched Convenience.";
+      "Knowledge at your fingertips: Unlock the answers with Blended Learning!";
   static const String signUpTitle = "Let's create your account";
   static const String forgetPasswordTitle = "Forget password";
   static const String forgetPasswordSubtitle =

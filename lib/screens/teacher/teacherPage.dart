@@ -11,7 +11,7 @@ class _TeacherPageState extends State<TeacherPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Teacher Page")),
+      appBar: AppBar(title: const Text("Teacher Page")),
     );
   }
 }

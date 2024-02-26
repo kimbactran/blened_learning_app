@@ -1,3 +1,4 @@
+import 'package:blended_learning_appmb/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class LElevatedButtonTheme {
@@ -7,10 +8,10 @@ class LElevatedButtonTheme {
     style: ElevatedButton.styleFrom(
         elevation: 0,
         foregroundColor: Colors.white,
-        backgroundColor: Colors.purple,
+        backgroundColor: LColors.primary1,
         disabledForegroundColor: Colors.grey,
         disabledBackgroundColor: Colors.grey,
-        side: const BorderSide(color: Colors.purple),
+        side: const BorderSide(color: LColors.primary1),
         padding: const EdgeInsets.symmetric(vertical: 18),
         textStyle: const TextStyle(
             fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600),
@@ -23,10 +24,10 @@ class LElevatedButtonTheme {
     style: ElevatedButton.styleFrom(
         elevation: 0,
         foregroundColor: Colors.black,
-        backgroundColor: Colors.purple,
+        backgroundColor: LColors.primary1,
         disabledForegroundColor: Colors.grey,
         disabledBackgroundColor: Colors.grey,
-        side: const BorderSide(color: Colors.purple),
+        side: const BorderSide(color: LColors.primary1),
         padding: const EdgeInsets.symmetric(vertical: 18),
         textStyle: const TextStyle(
             fontSize: 16, color: Colors.black, fontWeight: FontWeight.w600),
