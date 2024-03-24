@@ -1,5 +1,5 @@
 class LApi {
-  static const String baseUrl = 'http://localhost:3001';
+  static const String baseUrl = 'http://192.168.2.107:3001';
   static _AuthApi authApi = _AuthApi();
   static _UserApi userApi = _UserApi();
   static _ClassroomApi classroomApi = _ClassroomApi();

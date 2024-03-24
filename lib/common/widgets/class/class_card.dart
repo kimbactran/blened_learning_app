@@ -1,6 +1,8 @@
 import 'package:blended_learning_appmb/common/widgets/custom_shapes/containers/circular_container.dart';
 import 'package:blended_learning_appmb/common/widgets/custom_shapes/containers/rounded_container.dart';
 import 'package:blended_learning_appmb/common/widgets/image/rounded_image.dart';
+import 'package:blended_learning_appmb/data/repositories/question/question_repository.dart';
+import 'package:blended_learning_appmb/features/question/models/class_model.dart';
 import 'package:blended_learning_appmb/features/question/screens/classes/classes_details.dart';
 import 'package:blended_learning_appmb/utils/constants/colors.dart';
 import 'package:blended_learning_appmb/utils/constants/image_strings.dart';
@@ -12,12 +14,12 @@ class LClassCard extends StatelessWidget {
   const LClassCard(
       {super.key,
       required this.showBorder,
-      required this.classId,
-      required this.className,
-      required this.image});
+      this.image = LImages.classImage1,
+      required this.course});
 
   final bool showBorder;
-  final String classId, className, image;
+  final String? image;
+  final ClassModel course;
 
   @override
   Widget build(BuildContext context) {
@@ -29,34 +31,34 @@ class LClassCard extends StatelessWidget {
           padding: const EdgeInsets.all(LSizes.sm),
           showBorder: showBorder,
           backgroundColor: Colors.transparent,
-          child: const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Row(
               children: [
-                Row(
+                LRoundedImage(
+                  imageUrl: image!,
+                  height: 60,
+                  width: 60,
+                ),
+                SizedBox(
+                  width: LSizes.spaceBtwItems,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    LRoundedImage(
-                      imageUrl: LImages.classImage1,
-                      height: 60,
-                      width: 60,
-                    ),
-                    SizedBox(
-                      width: LSizes.spaceBtwItems,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('MATH6464 - Xác suất thống kê'),
-                        Text("Kỳ 2, Năm học 2023 - 2024")
-                      ],
-                    ),
+                    Text(course.title!),
+                    Text("Kỳ 2, Năm học 2023 - 2024")
                   ],
                 ),
-                LCircularContainer(
-                  backgroundColor: LColors.secondary,
-                  padding: LSizes.sm,
-                  child: Text('2'),
-                )
-              ]),
+              ],
+            ),
+            LCircularContainer(
+              backgroundColor: LColors.secondary,
+              padding: LSizes.sm,
+              child: Text(
+                  course.numberQuestion != null ? course.numberQuestion! : '0'),
+            )
+          ]),
         ),
       ),
     );

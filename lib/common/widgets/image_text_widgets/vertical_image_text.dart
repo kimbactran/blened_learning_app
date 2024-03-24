@@ -54,16 +54,18 @@ class LVerticalImageText extends StatelessWidget {
             const SizedBox(
               height: LSizes.spaceBtwItems / 2,
             ),
-            SizedBox(
-              width: 55,
-              child: Text(
-                title,
-                style: Theme.of(context)
-                    .textTheme
-                    .labelMedium!
-                    .apply(color: textColor),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+            Flexible(
+              child: SizedBox(
+                width: 62,
+                child: Text(
+                  title,
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelMedium!
+                      .apply(color: textColor),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             )
           ],

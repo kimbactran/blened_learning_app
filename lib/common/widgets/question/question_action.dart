@@ -1,3 +1,4 @@
+import 'package:blended_learning_appmb/features/question/models/question_model.dart';
 import 'package:blended_learning_appmb/features/question/screens/q&a/question_detail.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,9 @@ import 'package:iconsax/iconsax.dart';
 class QuestionAction extends StatelessWidget {
   const QuestionAction({
     super.key,
+    required this.question,
   });
+  final QuestionModel question;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +27,9 @@ class QuestionAction extends StatelessWidget {
           ],
         ),
         ElevatedButton(
-          onPressed: () => Get.to(() => const QuestionDetailScreen()),
+          onPressed: () => Get.to(() => QuestionDetailScreen(
+                question: question,
+              )),
           child: const Text("Trả lời"),
         )
       ],

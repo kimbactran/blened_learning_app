@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:blended_learning_appmb/models/classrooms_model.dart';
 import 'package:blended_learning_appmb/features/admin/viewDetailClass.dart';
-import 'package:blended_learning_appmb/utils/api.dart';
+import 'package:blended_learning_appmb/utils/http/api.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;

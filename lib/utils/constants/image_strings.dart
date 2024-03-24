@@ -88,4 +88,9 @@ class LImages {
   static const String classImage = "assets/images/class/class_image.png";
   static const String classImage1 = "assets/images/class/class_images_1.png";
   static const String classImage2 = "assets/images/class/class_images_2.png";
+
+  // Loader
+  static const String loaderAnimation =
+      "assets/images/loading/loading_animated.gif";
+  static const String loaderThreeDot = 'assets/images/loading/3dot_loading.gif';
 }

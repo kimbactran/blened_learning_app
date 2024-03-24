@@ -1,3 +1,4 @@
+import 'package:blended_learning_appmb/features/personalization/models/user_model.dart';
 import 'package:blended_learning_appmb/utils/constants/image_strings.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
 import 'package:blended_learning_appmb/utils/helpers/helper_functions.dart';

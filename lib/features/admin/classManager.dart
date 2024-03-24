@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:blended_learning_appmb/features/admin/viewDetailClass.dart';
-import 'package:blended_learning_appmb/utils/api.dart';
+import 'package:blended_learning_appmb/utils/http/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutter/material.dart';

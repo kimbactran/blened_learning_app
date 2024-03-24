@@ -1,5 +1,5 @@
 import 'package:blended_learning_appmb/common/widgets/appbar/appbar.dart';
-import 'package:blended_learning_appmb/features/question/controllers/post_contoller.dart';
+import 'package:blended_learning_appmb/features/question/controllers/question_contoller.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,7 +9,7 @@ class AddNewQuestionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final postController = Get.find<PostController>();
+    final postController = Get.find<QuestionController>();
     return Scaffold(
       appBar: LAppBar(
         title: Text("Add new Question",

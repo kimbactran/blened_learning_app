@@ -3,7 +3,9 @@ import 'package:blended_learning_appmb/common/widgets/icons/circular_icon.dart';
 import 'package:blended_learning_appmb/common/widgets/image_text_widgets/vertical_image_text.dart';
 import 'package:blended_learning_appmb/common/widgets/question/question_card.dart';
 import 'package:blended_learning_appmb/common/widgets/texts/section_heading.dart';
-import 'package:blended_learning_appmb/features/question/controllers/post_contoller.dart';
+import 'package:blended_learning_appmb/features/question/controllers/class_controller.dart';
+import 'package:blended_learning_appmb/features/question/controllers/question_contoller.dart';
+import 'package:blended_learning_appmb/features/question/models/question_model.dart';
 import 'package:blended_learning_appmb/features/question/screens/classes/classes.dart';
 import 'package:blended_learning_appmb/features/question/screens/q&a/add_new_question.dart';
 import 'package:blended_learning_appmb/utils/constants/colors.dart';
@@ -18,7 +20,8 @@ class QuestionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final postController = Get.put(PostController());
+    final questionController = Get.put(QuestionController());
+    final classController = ClassController.instance;
 
     return Scaffold(
       appBar: LAppBar(
@@ -49,76 +52,61 @@ class QuestionScreen extends StatelessWidget {
                 showActionButton: true,
                 onPressed: () => Get.to(() => const ClassesScreen()),
               ),
-              SizedBox(
-                height: 80,
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: 6,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (_, item) {
-                      return const LVerticalImageText(
-                          image: LImages.classImage,
-                          title: 'INT3848 - Classroom Name');
-                    }),
-              ),
+              Obx(() {
+                if (classController.isLoading.value) {
+                  return const Center(
+                    child: Image(image: AssetImage(LImages.loaderThreeDot)),
+                  );
+                }
+                if (classController.allClasses.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'No Data Found!',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .apply(color: Colors.white),
+                    ),
+                  );
+                }
+                return SizedBox(
+                  height: 80,
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: classController.allClasses.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (_, index) {
+                        return LVerticalImageText(
+                            image: LImages.classImage,
+                            title: classController.allClasses[index].title!);
+                      }),
+                );
+              }),
               const Divider(),
               Obx(
                 () => ListView.builder(
-                  itemCount: postController.questions.length,
+                  itemCount: questionController.allQuestions.length,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    List<String> reversedQuestions =
-                        List.from(postController.questions.reversed);
-                    return Column(
-                      children: [
-                        LQuestionCard(
-                          questionText: reversedQuestions[index],
-                          tags: const [
-                            "UET",
-                            "Xác suất thống kê",
-                            "Biến cố của xác suất"
-                          ],
+                  itemBuilder: (_, index) {
+                    if (questionController.allQuestions.isEmpty) {
+                      return Center(
+                        child: Text(
+                          'No Question!',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .apply(color: Colors.white),
                         ),
-                        const SizedBox(
-                          height: LSizes.spaceBtwItems,
-                        ),
-                      ],
-                    );
+                      );
+                    } else {
+                      // return Text("đây là 1 câu hỏi");
+                      List<QuestionModel> reversedQuestions =
+                          List.from(questionController.allQuestions.reversed);
+                      return LQuestionCard(question: reversedQuestions[index]);
+                    }
                   },
                 ),
-              ),
-              const SizedBox(
-                height: LSizes.spaceBtwSections,
-              ),
-              const LQuestionCard(
-                questionText:
-                    "According to the table manners in England, we have to use a knife and folk at dinner",
-                tags: ["UET", "Xác suất thống kê", "Biến cố của xác suất"],
-              ),
-              const SizedBox(
-                height: LSizes.spaceBtwItems,
-              ),
-              const LQuestionCard(
-                questionText:
-                    "According to the table manners in England, we have to use a knife and folk at dinner",
-                tags: ["UET", "Xác suất thống kê", "Biến cố của xác suất"],
-              ),
-              const SizedBox(
-                height: LSizes.spaceBtwItems,
-              ),
-              const LQuestionCard(
-                questionText:
-                    "According to the table manners in England, we have to use a knife and folk at dinner",
-                tags: ["UET", "Xác suất thống kê", "Biến cố của xác suất"],
-              ),
-              const SizedBox(
-                height: LSizes.spaceBtwItems,
-              ),
-              const LQuestionCard(
-                questionText:
-                    "According to the table manners in England, we have to use a knife and folk at dinner",
-                tags: ["UET", "Xác suất thống kê", "Biến cố của xác suất"],
               ),
             ],
           ),

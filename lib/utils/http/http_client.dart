@@ -1,34 +1,62 @@
 import 'dart:convert';
 
+import 'package:blended_learning_appmb/utils/http/api.dart';
 import 'package:http/http.dart' as http;
 
 class LHttpHelper {
-  static const String _baseUrl = '';
+  static const String _baseUrl = LApi.baseUrl;
 
   // Helper method to make a GET request
-  static Future<Map<String, dynamic>> get(String endpoint) async {
-    final response = await http.get(Uri.parse('$_baseUrl/$endpoint'));
-    return _handleResponse(response);
+  static Future<http.Response> get(String endpoint, String? token) async {
+    var header = {
+      'Content-Type': 'application/json',
+    };
+    if (token!.isNotEmpty) {
+      header['Authorization'] = 'Bearer ${token}';
+    }
+    final response =
+        await http.get(Uri.parse('$_baseUrl$endpoint'), headers: header);
+    return response;
   }
 
   // Helper method to make a POST request
-  static Future<Map<String, dynamic>> post(
-      String endpoint, dynamic data) async {
-    final response = await http.post(Uri.parse('$_baseUrl/$endpoint'),
-        headers: {'Content-Type': 'application/json'}, body: json.encode(data));
-    return _handleResponse(response);
+  static Future<http.Response> post(
+      String endpoint, dynamic data, String? token) async {
+    var header = {
+      'Content-Type': 'application/json',
+    };
+    if (token!.isNotEmpty) {
+      header['Authorization'] = 'Bearer ${token}';
+    }
+    final response = await http.post(Uri.parse('$_baseUrl$endpoint'),
+        headers: header, body: json.encode(data));
+    return response;
   }
 
   // Helper method to make a PUT request
-  static Future<Map<String, dynamic>> put(String endpoint, dynamic data) async {
-    final response = await http.put(Uri.parse('$_baseUrl/$endpoint'),
-        headers: {'Content-Type': 'application/json'}, body: json.encode(data));
-    return _handleResponse(response);
+  static Future<http.Response> put(
+      String endpoint, dynamic data, String? token) async {
+    var header = {
+      'Content-Type': 'application/json',
+    };
+    if (token!.isNotEmpty) {
+      header['Authorization'] = 'Bearer ${token}';
+    }
+    final response = await http.put(Uri.parse('$_baseUrl$endpoint'),
+        headers: header, body: json.encode(data));
+    return response;
   }
 
-  static Future<Map<String, dynamic>> delete(String endpoint) async {
-    final response = await http.delete(Uri.parse('$_baseUrl/$endpoint'));
-    return _handleResponse(response);
+  static Future<http.Response> delete(String endpoint, String? token) async {
+    var header = {
+      'Content-Type': 'application/json',
+    };
+    if (token!.isNotEmpty) {
+      header['Authorization'] = 'Bearer ${token}';
+    }
+    final response =
+        await http.delete(Uri.parse('$_baseUrl$endpoint'), headers: header);
+    return response;
   }
 
   // Handle the HTTP response

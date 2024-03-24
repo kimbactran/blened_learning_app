@@ -18,28 +18,7 @@ class QuestionInClassScreen extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.all(LSizes.sm),
           child: Column(
-            children: [
-              LQuestionCard(
-                questionText:
-                    "According to the table manners in England, we have to use a knife and folk at dinner",
-                tags: ["UET", "Xác suất thống kê", "Biến cố của xác suất"],
-              ),
-              LQuestionCard(
-                questionText:
-                    "According to the table manners in England, we have to use a knife and folk at dinner",
-                tags: ["UET", "Xác suất thống kê", "Biến cố của xác suất"],
-              ),
-              LQuestionCard(
-                questionText:
-                    "According to the table manners in England, we have to use a knife and folk at dinner",
-                tags: ["UET", "Xác suất thống kê", "Biến cố của xác suất"],
-              ),
-              LQuestionCard(
-                questionText:
-                    "According to the table manners in England, we have to use a knife and folk at dinner",
-                tags: ["UET", "Xác suất thống kê", "Biến cố của xác suất"],
-              ),
-            ],
+            children: [],
           ),
         ),
       ),

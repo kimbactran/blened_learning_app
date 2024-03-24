@@ -2,24 +2,38 @@ import 'package:blended_learning_appmb/common/widgets/appbar/appbar.dart';
 import 'package:blended_learning_appmb/common/widgets/custom_shapes/containers/rounded_container.dart';
 import 'package:blended_learning_appmb/common/widgets/tag_card/tag_card.dart';
 import 'package:blended_learning_appmb/common/widgets/user_card/user_card.dart';
-import 'package:blended_learning_appmb/features/question/controllers/post_contoller.dart';
+import 'package:blended_learning_appmb/common/widgets/user_card/user_card_question.dart';
+import 'package:blended_learning_appmb/features/question/controllers/question_contoller.dart';
+import 'package:blended_learning_appmb/features/question/models/question_model.dart';
 import 'package:blended_learning_appmb/utils/constants/colors.dart';
 import 'package:blended_learning_appmb/utils/constants/image_strings.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
+// ignore: must_be_immutable
 class QuestionDetailScreen extends StatelessWidget {
-  const QuestionDetailScreen({Key? key}) : super(key: key);
+  const QuestionDetailScreen({
+    super.key,
+    required this.question,
+    //  required this.questionId
+  });
+  // String questionId;
+  final QuestionModel question;
 
   @override
   Widget build(BuildContext context) {
-    final postController = Get.find<PostController>();
+    final questionController = QuestionController.instance;
 
     return Scaffold(
-      appBar: const LAppBar(
-        title: Center(child: LUserCard()),
+      appBar: LAppBar(
+        title: Center(
+            child: LUserCardQuestion(
+          user: question.user!,
+          time: question.createdAt!,
+        )),
         showBackArrow: true,
       ),
       body: SingleChildScrollView(
@@ -28,7 +42,10 @@ class QuestionDetailScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("According....."),
+              Html(
+                data: question.content,
+              ),
+              // Text(question.content!),
               const SizedBox(
                 height: LSizes.spaceBtwItems,
               ),
@@ -38,10 +55,12 @@ class QuestionDetailScreen extends StatelessWidget {
               const SizedBox(
                 height: LSizes.spaceBtwItems,
               ),
-              const Wrap(spacing: LSizes.defaultSpace, children: [
-                LTagCard(title: "UET"),
-                LTagCard(title: "Xác suất thống kê"),
-              ]),
+              Wrap(
+                spacing: LSizes.defaultSpace,
+                children: question.tags!
+                    .map((tag) => LTagCard(title: tag.tag!))
+                    .toList(),
+              ),
               const SizedBox(
                 height: LSizes.spaceBtwItems,
               ),
@@ -110,7 +129,7 @@ class QuestionDetailScreen extends StatelessWidget {
                 () => ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: postController.comments.length,
+                  itemCount: questionController.comments.length,
                   itemBuilder: (context, index) {
                     return LRoundedContainer(
                       showBorder: false,
@@ -121,7 +140,7 @@ class QuestionDetailScreen extends StatelessWidget {
                           const SizedBox(
                             height: LSizes.spaceBtwItems / 2,
                           ),
-                          Text(postController.comments[index]),
+                          Text(questionController.comments[index]),
                           const SizedBox(
                             height: LSizes.spaceBtwItems / 2,
                           ),
@@ -177,7 +196,7 @@ class QuestionDetailScreen extends StatelessWidget {
                     Expanded(
                       child: TextField(
                         maxLines: null,
-                        controller: postController.commentText,
+                        controller: questionController.commentText,
                         decoration: const InputDecoration(
                           hintText: 'Enter your comment',
                         ),
@@ -188,7 +207,7 @@ class QuestionDetailScreen extends StatelessWidget {
                         Iconsax.send1,
                         color: LColors.primary1,
                       ),
-                      onPressed: postController.addComment,
+                      onPressed: questionController.addComment,
                     ),
                   ],
                 ),
