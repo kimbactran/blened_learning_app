@@ -2,16 +2,27 @@ import 'package:blended_learning_appmb/features/personalization/models/user_mode
 import 'package:blended_learning_appmb/utils/constants/image_strings.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
 import 'package:blended_learning_appmb/utils/helpers/helper_functions.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../../../utils/constants/enums.dart';
+
 class LUserCardQuestion extends StatelessWidget {
-  const LUserCardQuestion({super.key, required this.user, required this.time});
+  const LUserCardQuestion({super.key, required this.user, required this.time, required this.postId, this.onActionDelete, this.onActionEdit});
   final UserModel user;
   final String time;
+  final String postId;
+  final  Function()? onActionDelete;
+  final  Function()? onActionEdit;
+
 
   @override
   Widget build(BuildContext context) {
+    final deviceStorage = GetStorage();
+    bool showPopUpMenu = user.id! == deviceStorage.read("User Id");
     final darkMode = LHelperFunctions.isDarkMode(context);
     return Column(
       children: [
@@ -28,20 +39,47 @@ class LUserCardQuestion extends StatelessWidget {
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       user.nameAndRole,
-                      style: Theme.of(context).textTheme.titleLarge,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                       timeago.format(DateTime.parse(time), locale: 'en'),
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme.of(context).textTheme.labelLarge,
                     )
                   ],
-                )
+                ),
               ],
             ),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
+            if (showPopUpMenu)
+            PopupMenuButton<MenuOption>(
+              icon: const Icon(Icons.more_vert),
+              itemBuilder: (BuildContext context) {
+
+                  return <PopupMenuEntry<MenuOption>>[
+                    const PopupMenuItem<MenuOption>(
+                      value: MenuOption.delete,
+                      child: Text('Delete'),
+                    ),
+                    const PopupMenuItem<MenuOption>(
+                      value: MenuOption.edit,
+                      child: Text('Edit'),
+                    ),
+                  ];
+
+              },
+              onSelected: (MenuOption result) {
+                if (result == MenuOption.delete) {
+                  onActionDelete?.call();
+                } else if (result == MenuOption.edit) {
+                  onActionEdit?.call();
+                }
+              },
+            ),
           ],
         ),
 

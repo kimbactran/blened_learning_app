@@ -15,6 +15,7 @@ class ClassModel {
       this.resources,
       this.status,
       this.numberQuestion});
+  static ClassModel empty() => ClassModel(title: '');
 
   ClassModel.fromJson(Map<String, dynamic> json) {
     createdAt = json['createdAt'];

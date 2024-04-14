@@ -12,11 +12,11 @@ class AnswerRepository extends GetxController {
   final deviceStorage = GetStorage();
 
   Future<List<AnswerModel>> getAnswerOfPost(
-      String postId, String classId) async {
+      String postId, String classId, String order) async {
     try {
       String token = deviceStorage.read('Token');
       var endpoint =
-          LApi.commentApi.comment + '?postId=${postId}&classroomId=${classId}';
+          LApi.commentApi.comment + '?postId=${postId}&classroomId=${classId}&order=${order}';
       var response = await LHttpHelper.get(endpoint, token);
       if (response.statusCode == 200) {
         List jsonList = jsonDecode(response.body);
@@ -26,6 +26,62 @@ class AnswerRepository extends GetxController {
       } else {
         throw Exception('Failed to load data ${response.statusCode}');
       }
+    } catch (e) {
+      final message = e.toString();
+      throw '$message. Please try again!';
+    }
+  }
+
+  Future<void> addComment(String content, String postId, String classId) async {
+    try {
+      String token = deviceStorage.read('Token');
+      var endpoint = LApi.commentApi.comment;
+      Map data = {
+        'postId': postId,
+        'classroomId': classId,
+        'content': content,
+      };
+      var response = await LHttpHelper.post(endpoint, data, token);
+      if (response.statusCode != 200) {
+        throw Exception('Failed to load data ${response.statusCode}');
+      }
+    } catch (e) {
+      final message = e.toString();
+      throw '$message. Please try again!';
+    }
+  }
+
+  Future<void> addAnswerOfAnswer(String content, String postId, String classId, String parentId) async {
+    try {
+      String token = deviceStorage.read('Token');
+      var endpoint = LApi.commentApi.comment;
+      Map data = {
+        'postId': postId,
+        'classroomId': classId,
+        'content': content,
+        'parentId': parentId,
+      };
+      var response = await LHttpHelper.post(endpoint, data, token);
+      if (response.statusCode != 200) {
+        throw Exception('Failed to load data ${response.statusCode}');
+      }
+    } catch (e) {
+      final message = e.toString();
+      throw '$message. Please try again!';
+    }
+  }
+
+  Future<void> deleteAnswer(String answerId) async{
+    try {
+      String token = deviceStorage.read('Token');
+      var endpoint = LApi.commentApi.comment + '/${answerId}';
+      var response = await LHttpHelper.delete(endpoint, token);
+      if(response.statusCode == 200){
+
+      } else {
+        throw Exception('Failed to delete ${response.statusCode}');
+      }
+
     } catch (e) {
       final message = e.toString();
       throw '$message. Please try again!';

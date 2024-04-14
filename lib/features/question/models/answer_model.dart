@@ -25,6 +25,7 @@ class AnswerModel {
       this.isUpVote,
       this.isDownVote,
       this.postId});
+  static AnswerModel empty() => AnswerModel(id: '', content: '');
 
   AnswerModel.fromJson(Map<String, dynamic> json) {
     createdAt = json['createdAt'];

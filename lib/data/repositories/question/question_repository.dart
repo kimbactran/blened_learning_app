@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:blended_learning_appmb/data/repositories/class/class_repository.dart';
 import 'package:blended_learning_appmb/features/question/models/class_model.dart';
 import 'package:blended_learning_appmb/features/question/models/question_model.dart';
+import 'package:blended_learning_appmb/features/question/models/tag_model.dart';
 import 'package:blended_learning_appmb/utils/http/api.dart';
 import 'package:blended_learning_appmb/utils/http/http_client.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,7 @@ class QuestionRepository extends GetxController {
   // Variable
   final deviceStorage = GetStorage();
   RxList<QuestionModel> allQuestion = <QuestionModel>[].obs;
+  RxList<TagModel> tags = <TagModel>[].obs;
 
   Future<List<QuestionModel>> getQuestionInClass(String classId) async {
     try {
@@ -38,6 +40,7 @@ class QuestionRepository extends GetxController {
   Future<List<QuestionModel>> getQuestionByUser(
       List<ClassModel> classes) async {
     try {
+      List<QuestionModel> allQuestion = [];
       for (var course in classes) {
         // Lấy lớp
         List<QuestionModel> questions = await getQuestionInClass(course.id!);
@@ -59,4 +62,129 @@ class QuestionRepository extends GetxController {
       throw '$message. Please try again!';
     }
   }
-}
+
+  Future<QuestionModel> getQuestionDetail(String questionId) async {
+    try {
+      String token = deviceStorage.read('Token');
+      var endpoint = LApi.postApi.post + '/${questionId}';
+      var response = await LHttpHelper.get(endpoint, token);
+      if (response.statusCode == 200) {
+        var json = jsonDecode(response.body);
+        return QuestionModel.fromJson(json);
+      }
+      throw ('Something went wrong while get question. Status code: ${response.statusCode}');
+    } catch (e) {
+      final message = e.toString();
+      throw '$message. Please try again!';
+    }
+  }
+
+  Future<bool> addQuestion(
+      String title, String content, String classroomId, List<String> tagIds) async {
+    try {
+      Map body = {
+        'title': title,
+        'content': content,
+        'classroomId': classroomId,
+        'tagIds': tagIds
+      };
+      String token = deviceStorage.read('Token');
+      var endpoint = LApi.postApi.post;
+      var response = await LHttpHelper.post(endpoint, body, token);
+      if (response.statusCode == 200) {
+        print(jsonDecode(response.body));
+        return true;
+      } else {
+        throw Exception('Failed to load data ${response.statusCode}');
+      }
+    } catch (e) {
+      final message = e.toString();
+      throw '$message. Please try again!';
+    }
+  }
+
+  Future<bool> likeQuestion(QuestionModel question, bool status) async {
+    try {
+      String token = deviceStorage.read('Token');
+      var endpoint = LApi.postApi.votePost + '/${question.id}';
+      Map body = {
+        'isUpVote' : status,
+      };
+      var response = await LHttpHelper.put(endpoint, body, token);
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw Exception('Failed to load data ${response.statusCode}');
+      }
+    } catch (e) {
+      final message = e.toString();
+      throw '$message. Please try again!';
+    }
+  }
+
+  Future<bool> dislikeQuestion(QuestionModel question, bool status) async {
+    try {
+      String token = deviceStorage.read('Token');
+      Map body = {
+        'isDownVote' : status,
+      };
+      var endpoint = LApi.postApi.votePost + '/${question.id}';
+      var response = await LHttpHelper.put(endpoint, body, token);
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw Exception('Failed to load data ${response.statusCode}');
+      }
+    } catch (e) {
+      final message = e.toString();
+      throw '$message. Please try again!';
+    }
+  }
+
+  Future<List<TagModel>> getTagInClass(String classId) async {
+    try {
+      String token = deviceStorage.read('Token');
+      var endpoint = LApi.tagApi.tagInClassroom + '/${classId}';
+      var response = await LHttpHelper.get(endpoint, token);
+      if (response.statusCode == 200) {
+        List jsonList = jsonDecode(response.body);
+        return jsonList.map((tag) => TagModel.fromJson(tag)).toList();
+      } else {
+        throw Exception('Failed to load data ${response.statusCode}');
+      }
+    } catch (e) {
+      final message = e.toString();
+      throw '$message. Please try again!';
+    }
+  }
+
+  Future<List<TagModel>> getAllTags(List<ClassModel> classes) async {
+    try {
+      for (var course in classes) {
+        // Lấy lớp
+        List<TagModel> tag = await getTagInClass(course.id!);
+        tags.addAll(tag);
+      }
+      return tags;
+    } catch (e) {
+      final message = e.toString();
+      throw '$message. Please try again!';
+    }
+  }
+
+  Future<void> deleteQuestion(String questionId) async {
+    try {
+      String token = deviceStorage.read('Token');
+      var endpoint = LApi.postApi.post + '/${questionId}';
+      var response = await LHttpHelper.delete(endpoint, token);
+      if(response.statusCode == 200){
+
+      } else {
+        throw Exception('Failed to delete ${response.statusCode}');
+      }
+
+    } catch (e) {
+      final message = e.toString();
+      throw '$message. Please try again!';
+  }
+}}

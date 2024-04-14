@@ -34,20 +34,21 @@ dependencies:
 
  # Utility packages
   http: ^1.2.0
-  intl: ^0.19.0
+  intl: 0.18.1
   logger: ^2.0.2+1
   url_launcher: ^6.2.4
   flutter_native_splash: ^2.3.10
   smooth_page_indicator: ^1.1.0
   flutter_simple_treeview: ^3.0.2
   comment_box: ^0.0.18
-  connectivity_plus: ^5.0.2
+  connectivity_plus: ^6.0.1
   lottie: ^3.1.0
   shimmer: ^3.0.0
   timeago: ^3.6.1
   flutter_html: 3.0.0-beta.2
-  flutter_quill: 2.0.7
-
+  flutter_quill: ^9.3.3
+  vsc_quill_delta_to_html: ^1.0.4
+  quill_html_converter: ^9.3.3
 
 
 

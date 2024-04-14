@@ -40,23 +40,22 @@ class LClassCard extends StatelessWidget {
                   height: 60,
                   width: 60,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: LSizes.spaceBtwItems,
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(course.title!),
-                    Text("Kỳ 2, Năm học 2023 - 2024")
+                    const Text("Semester II of the 2023 - 2024", maxLines: 1, overflow: TextOverflow.ellipsis,)
                   ],
                 ),
               ],
             ),
             LCircularContainer(
-              backgroundColor: LColors.secondary,
               padding: LSizes.sm,
               child: Text(
-                  course.numberQuestion != null ? course.numberQuestion! : '0'),
+                  course.numberQuestion != null ? course.numberQuestion! : '0', style: Theme.of(context).textTheme.bodyLarge,),
             )
           ]),
         ),

@@ -1,4 +1,5 @@
 import 'package:blended_learning_appmb/features/personalization/models/user_model.dart';
+import 'package:blended_learning_appmb/features/question/models/answer_model.dart';
 import 'package:blended_learning_appmb/features/question/models/tag_model.dart';
 
 class QuestionModel {
@@ -13,19 +14,21 @@ class QuestionModel {
   int? numDownVote;
   bool? isUpVote;
   bool? isDownVote;
+  List<AnswerModel>? answers;
 
-  QuestionModel(
-      {this.createdAt,
-      this.updatedAt,
-      this.id,
-      this.title,
-      this.content,
-      this.user,
-      this.tags,
-      this.numUpVote,
-      this.numDownVote,
-      this.isUpVote,
-      this.isDownVote});
+  QuestionModel({
+    this.createdAt,
+    this.updatedAt,
+    this.id,
+    this.title,
+    this.content,
+    this.user,
+    this.tags,
+    this.numUpVote,
+    this.numDownVote,
+    this.isUpVote,
+    this.isDownVote,
+  });
 
   QuestionModel.fromJson(Map<String, dynamic> json) {
     createdAt = json['createdAt'];

@@ -1,5 +1,5 @@
 class LApi {
-  static const String baseUrl = 'http://192.168.2.107:3001';
+  static const String baseUrl = 'http://192.168.2.109:3001';
   static _AuthApi authApi = _AuthApi();
   static _UserApi userApi = _UserApi();
   static _ClassroomApi classroomApi = _ClassroomApi();
@@ -10,7 +10,7 @@ class LApi {
 
 class _TagApi {
   final String tagSyllabus = '/v1/tags/syllabus';
-  final String taFree = '/v1/tags/free';
+  final String tagFree = '/v1/tags/free';
   final String tagInClassroom = '/v1/tags/tag-by-classroom';
 }
 

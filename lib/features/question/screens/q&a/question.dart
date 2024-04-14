@@ -11,6 +11,7 @@ import 'package:blended_learning_appmb/features/question/screens/q&a/add_new_que
 import 'package:blended_learning_appmb/utils/constants/colors.dart';
 import 'package:blended_learning_appmb/utils/constants/image_strings.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
+import 'package:blended_learning_appmb/utils/helpers/cloud_helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -69,43 +70,48 @@ class QuestionScreen extends StatelessWidget {
                     ),
                   );
                 }
-                return SizedBox(
-                  height: 80,
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: classController.allClasses.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (_, index) {
-                        return LVerticalImageText(
-                            image: LImages.classImage,
-                            title: classController.allClasses[index].title!);
-                      }),
+                return Obx(
+                  () => SizedBox(
+                    height: 80,
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: classController.allClasses.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (_, index) {
+                          return LVerticalImageText(
+                              image: LImages.classImage,
+                              title: classController.allClasses[index].title!);
+                        }),
+                  ),
                 );
               }),
               const Divider(),
               Obx(
-                () => ListView.builder(
-                  itemCount: questionController.allQuestions.length,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (_, index) {
-                    if (questionController.allQuestions.isEmpty) {
-                      return Center(
-                        child: Text(
-                          'No Question!',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .apply(color: Colors.white),
-                        ),
-                      );
-                    } else {
-                      // return Text("đây là 1 câu hỏi");
-                      List<QuestionModel> reversedQuestions =
-                          List.from(questionController.allQuestions.reversed);
-                      return LQuestionCard(question: reversedQuestions[index]);
-                    }
+                () => FutureBuilder(
+                  key: Key(questionController.refreshData.value.toString()),
+                  future: questionController.getQuestionByUser(),
+                  builder: (context, snapshot){
+                    final widget = LCloudHelperFunctions.checkSingleRecordState(snapshot);
+                    if(widget != null) return widget;
+                    // Data found
+
+                    final questions = snapshot.data;
+                    return ListView.builder(
+                      itemCount: questions?.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (_, index) {
+                        //
+
+
+                          // return Text("đây là 1 câu hỏi");
+
+                          return LQuestionCard(question: questions![index],);
+
+                      },
+                    );
                   },
+
                 ),
               ),
             ],

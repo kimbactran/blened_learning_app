@@ -45,68 +45,26 @@ class LoginController extends GetxController {
       deviceStorage.write('Token', authenticationRepository.token.accessToken);
       deviceStorage.write('User Id', authenticationRepository.user.id);
       final role = authenticationRepository.user.role;
+      LFullScreenLoader.stopLoading();
       if (role == 'ADMIN') {
-        Get.off(const AdminPage());
+        Get.off(() => const AdminPage());
       } else if (role == 'TEACHER') {
-        Get.off(const TeacherPage());
+        Get.off(() => const TeacherPage());
       } else if (role == 'STUDENT') {
-        Get.to(() => const NavigationMenu());
+        Get.off(() => const NavigationMenu());
       } else {
         LLoader.errorSnackBar(
             title: 'Oh Snap!',
             message: "Unable to determine the logged in user's role!");
       }
+
       LLoader.successSnackBar(
           title: 'Login Successfully!', message: 'You are logged in as $role');
-      // var headers = {
-      //   "Access-Control-Allow-Origin": "*",
-      //   'Content-Type': 'application/json',
-      //   'Accept': '*/*'
-      // };
-      // var url = Uri.parse('http://192.168.2.110:3001/v1/auth/login');
-      // Map body = {
-      //   'email': email.text.trim().toString(),
-      //   'password': password.text.toString(),
-      // };
-      // var response = await http.post(url, body: {
-      //   'email': email.text.trim().toString(),
-      //   'password': password.text.toString(),
-      // });
 
-      // if (response.statusCode == 200) {
-      //   final json = jsonDecode(response.body.toString());
-      //   var token = json['token']['accessToken'];
-      //   var userId = json['user']['id'];
-      //   deviceStorage.write('Token', token);
-      //   deviceStorage.write('User Id', userId);
-
-      //   final SharedPreferences? prefs = await _prefs;
-
-      //   await prefs?.setString('token', token);
-      //   await prefs?.setString('userId', userId);
-      //   email.clear();
-      //   email.clear();
-      //   final role = json['user']['role'];
-      //   if (json['user']['role'] == 'ADMIN') {
-      //     Get.off(const AdminPage());
-      //   } else if (json['user']['role'] == 'TEACHER') {
-      //     Get.off(const TeacherPage());
-      //   } else if (json['user']['role'] == 'STUDENT') {
-      //     Get.to(() => const NavigationMenu());
-      //   } else {
-      //     LLoader.errorSnackBar(
-      //         title: 'Oh Snap!',
-      //         message: "Unable to determine the logged in user's role!");
-      //   }
-      //   LLoader.successSnackBar(
-      //       title: 'Login Successfully!',
-      //       message: 'You are logged in as $role');
-      // } else {
-      //   throw jsonDecode(response.body)["message"] ?? "Unknown Error Occured";
-      // }
     } catch (error) {
+      LFullScreenLoader.stopLoading();
+
       // Show some one Generic Error to the user
-      print(error);
       LLoader.errorSnackBar(title: 'Oh Snap!', message: error.toString());
     }
   }

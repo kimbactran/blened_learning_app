@@ -8,14 +8,19 @@ import 'package:blended_learning_appmb/features/question/screens/q&a/question_de
 import 'package:blended_learning_appmb/utils/constants/image_strings.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
+
+import '../../../features/question/controllers/question_contoller.dart';
 
 class LQuestionCard extends StatelessWidget {
   const LQuestionCard({super.key, required this.question});
 
   final QuestionModel question;
+
   @override
   Widget build(BuildContext context) {
+    final questionController = QuestionController.instance;
     return GestureDetector(
       onTap: () => Get.to(() => QuestionDetailScreen(
             question: question,
@@ -25,9 +30,10 @@ class LQuestionCard extends StatelessWidget {
         children: [
           LUserCardQuestion(
             user: question.user!,
-            time: question.createdAt!,
+            time: question.createdAt!, postId: question.id!,
+            onActionDelete: () => questionController.deleteQuestion(question.id!),
           ),
-          Text(question.title!),
+          Html(data: question.title!),
           const SizedBox(
             height: LSizes.spaceBtwItems,
           ),
@@ -37,8 +43,7 @@ class LQuestionCard extends StatelessWidget {
           ),
           Wrap(
             spacing: LSizes.defaultSpace,
-            children:
-                question.tags!.map((tag) => LTagCard(title: tag.tag!)).toList(),
+            children: question.tags!.map((tag) => LTagCard(tag: tag)).toList(),
           ),
           const SizedBox(
             height: LSizes.spaceBtwItems,
@@ -47,7 +52,7 @@ class LQuestionCard extends StatelessWidget {
             question: question,
           ),
           const SizedBox(
-            height: LSizes.spaceBtwSections,
+            height: LSizes.spaceBtwItems,
           ),
         ],
       ),

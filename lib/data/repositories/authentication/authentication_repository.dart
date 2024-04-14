@@ -29,7 +29,7 @@ class AuthenticationRepository extends GetxController {
         throw Exception('Failed to load data ${response.statusCode}');
       }
     } catch (e) {
-      throw 'Something went wrong when login. Please try again!';
+      throw 'Something went wrong when login. Please try again!, ${e.toString()}';
     }
   }
 }

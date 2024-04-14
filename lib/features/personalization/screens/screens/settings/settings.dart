@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../../authentication/screens/login/login.dart';
+
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
@@ -133,7 +135,7 @@ class SettingsScreen extends StatelessWidget {
                     child: OutlinedButton(
                       style: Theme.of(context).outlinedButtonTheme.style,
                       child: const Text('Logout'),
-                      onPressed: () {},
+                      onPressed: () => Get.offAll(() => const LoginScreen()),
                     ),
                   ),
                   const SizedBox(

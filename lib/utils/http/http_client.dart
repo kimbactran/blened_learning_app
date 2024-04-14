@@ -47,6 +47,32 @@ class LHttpHelper {
     return response;
   }
 
+  static Future<http.Response> putNotBody(
+      String endpoint, String? token) async {
+    var header = {
+      'Content-Type': 'application/json',
+    };
+    if (token!.isNotEmpty) {
+      header['Authorization'] = 'Bearer ${token}';
+    }
+    final response =
+        await http.put(Uri.parse('$_baseUrl$endpoint'), headers: header);
+    return response;
+  }
+
+  // Helper method to make a PUT request
+  static Future<http.Response> option(String endpoint, String? token) async {
+    var header = {
+      'Content-Type': 'application/json',
+    };
+    if (token!.isNotEmpty) {
+      header['Authorization'] = 'Bearer ${token}';
+    }
+    final response =
+        await http.head(Uri.parse('$_baseUrl$endpoint'), headers: header);
+    return response;
+  }
+
   static Future<http.Response> delete(String endpoint, String? token) async {
     var header = {
       'Content-Type': 'application/json',

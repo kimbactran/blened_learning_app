@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:blended_learning_appmb/common/widgets/loaders/loaders.dart';
 import 'package:blended_learning_appmb/data/repositories/class/class_repository.dart';
 import 'package:blended_learning_appmb/data/repositories/question/question_repository.dart';
+import 'package:blended_learning_appmb/data/repositories/tag_repository/tag_repository.dart';
 import 'package:blended_learning_appmb/features/question/models/class_model.dart';
+import 'package:blended_learning_appmb/features/question/models/tag_model.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -12,6 +14,7 @@ class ClassController extends GetxController {
 
   final isLoading = false.obs;
   RxList<ClassModel> allClasses = <ClassModel>[].obs;
+  RxList<TagModel> allTag = <TagModel>[].obs;
   final deviceStorage = GetStorage();
   final classRepository = Get.put(ClassRepository());
   final questionRepository = Get.put(QuestionRepository());

@@ -3,7 +3,6 @@
 
 enum TextSizes { small, medium, large }
 
-enum OrderStatus { process, shipped, delivered }
 
 enum PaymentMethods {
   paypal,
@@ -16,3 +15,7 @@ enum PaymentMethods {
 }
 
 enum Role { admin, teacher, student }
+
+enum LikeStatus { none, like, dislike }
+
+enum MenuOption {edit, delete}
