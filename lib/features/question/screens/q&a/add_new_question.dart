@@ -1,7 +1,7 @@
 import 'package:blended_learning_appmb/common/widgets/appbar/appbar.dart';
 import 'package:blended_learning_appmb/common/widgets/tag_card/tag_card.dart';
 import 'package:blended_learning_appmb/features/question/controllers/class_controller.dart';
-import 'package:blended_learning_appmb/features/question/controllers/question_contoller.dart';
+import 'package:blended_learning_appmb/features/question/controllers/question_controller.dart';
 import 'package:blended_learning_appmb/features/question/controllers/tag_controller.dart';
 import 'package:blended_learning_appmb/features/question/models/class_model.dart';
 import 'package:blended_learning_appmb/features/question/screens/tag/tag.dart';
@@ -57,7 +57,7 @@ class AddNewQuestionScreen extends StatelessWidget {
                     decoration: const InputDecoration(labelText: "Class"),
                     items: classController.allClasses
                         .map((course) => DropdownMenuItem<ClassModel>(
-                            value: course, child: Text(course.title ?? "")))
+                            value: course, child: Text(course.title ?? "", style: Theme.of(context).textTheme.bodyMedium, maxLines: 1, overflow: TextOverflow.ellipsis,)))
                         .toList(),
                     onChanged: (course) {
                       questionController.setClassSelected(course!);

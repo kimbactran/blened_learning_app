@@ -26,7 +26,7 @@ class QuestionRepository extends GetxController {
       if (response.statusCode == 200) {
         List jsonList = jsonDecode(response.body);
         return jsonList
-            .map((classes) => QuestionModel.fromJson(classes))
+            .map((question) => QuestionModel.fromJsonWithClass(question, classId))
             .toList();
       } else {
         throw Exception('Failed to load data ${response.statusCode}');
@@ -94,6 +94,52 @@ class QuestionRepository extends GetxController {
       if (response.statusCode == 200) {
         print(jsonDecode(response.body));
         return true;
+      } else {
+        throw Exception('Failed to load data ${response.statusCode}');
+      }
+    } catch (e) {
+      final message = e.toString();
+      throw '$message. Please try again!';
+    }
+  }
+
+  Future<bool> editQuestion(
+      String title, String content, String classroomId, List<String> tagIds) async {
+    try {
+      Map body = {
+        'title': title,
+        'content': content,
+        'classroomId': classroomId,
+        'tagIds': tagIds
+      };
+      String token = deviceStorage.read('Token');
+      var endpoint = LApi.postApi.post;
+      var response = await LHttpHelper.put(endpoint, body, token);
+      if (response.statusCode == 200) {
+        print(jsonDecode(response.body));
+        return true;
+      } else {
+        throw Exception('Failed to load data ${response.statusCode}');
+      }
+    } catch (e) {
+      final message = e.toString();
+      throw '$message. Please try again!';
+    }
+  }
+
+  Future<List<QuestionModel>> searchQuestion(
+      String keySearch, String classId, String order) async {
+    try {
+
+      String token = deviceStorage.read('Token');
+      var endpoint = LApi.postApi.postInClassroom + '/${classId}?keySearch=${keySearch}&order=${order}';
+      var response = await LHttpHelper.get(endpoint, token);
+      if (response.statusCode == 200) {
+        List jsonList = jsonDecode(response.body);
+        return jsonList
+            .map((question) => QuestionModel.fromJsonWithClass(question, classId))
+            .toList();
+
       } else {
         throw Exception('Failed to load data ${response.statusCode}');
       }

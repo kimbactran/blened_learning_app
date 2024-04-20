@@ -1,14 +1,11 @@
 import 'package:blended_learning_appmb/common/widgets/loaders/loaders.dart';
 import 'package:blended_learning_appmb/data/repositories/answer/answer_repository.dart';
-import 'package:blended_learning_appmb/data/repositories/class/class_repository.dart';
 import 'package:blended_learning_appmb/data/repositories/question/question_repository.dart';
 import 'package:blended_learning_appmb/features/question/controllers/class_controller.dart';
 import 'package:blended_learning_appmb/features/question/models/class_model.dart';
 import 'package:blended_learning_appmb/features/question/models/question_model.dart';
 import 'package:blended_learning_appmb/features/question/models/tag_model.dart';
-import 'package:blended_learning_appmb/navigation_menu.dart';
 import 'package:blended_learning_appmb/utils/constants/enums.dart';
-import 'package:blended_learning_appmb/utils/constants/image_strings.dart';
 import 'package:blended_learning_appmb/utils/popups/full_screen_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -16,7 +13,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:quill_html_converter/quill_html_converter.dart';
 
 import 'package:get/get.dart';
-import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
 
 class QuestionController extends GetxController {
   static QuestionController get instance => Get.find();
@@ -26,9 +22,10 @@ class QuestionController extends GetxController {
   // Variable
   final title = TextEditingController();
   final isLoading = false.obs;
-  final isLike = LikeStatus.none.obs;
   final isUpVote = false.obs;
   final isDownVote = false.obs;
+  final numUpVote = 0.obs;
+  final numDownVote = 0.obs;
   RxBool refreshData = true.obs;
 
   RxString classSelectedId = ''.obs;
@@ -36,8 +33,6 @@ class QuestionController extends GetxController {
 
   TextEditingController questionText = TextEditingController();
   final questions = <String>[].obs;
-  RxString question = ''.obs;
-  TextEditingController commentText = TextEditingController();
   final classController = Get.put(ClassController());
   final answerRepository = Get.put(AnswerRepository());
   final questionRepository = QuestionRepository.instance;
@@ -93,6 +88,16 @@ class QuestionController extends GetxController {
     super.onClose();
   }
 
+  Future<QuestionModel> getQuestionDetail(String questionId) async{
+    try {
+      final question = await questionRepository.getQuestionDetail(questionId);
+      return question;
+    }catch (e) {
+      LLoader.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      return QuestionModel.empty();
+    }
+  }
+
 
   Future<void> addQuestion(String classroomId, List<String> tagIds) async {
     try {
@@ -136,14 +141,30 @@ class QuestionController extends GetxController {
     }
   }
 
+  void editQuestion(String classroomId, List<String> tagIds){}
+
+
   void likeQuestion(QuestionModel question) async {
     isUpVote.value = !isUpVote.value;
+    if(isUpVote.value && isDownVote.value) {
+      isDownVote.value = !isDownVote.value;
+    }
       await questionRepository.likeQuestion(question, isUpVote.value);
+      final questionUpdate = await questionRepository.getQuestionDetail(question.id!);
+      numUpVote.value = questionUpdate.numUpVote!;
+      numDownVote.value = questionUpdate.numDownVote!;
+
   }
 
   void dislikeQuestion(QuestionModel question) async {
     isDownVote.value = !isDownVote.value;
+    if(isUpVote.value && isDownVote.value) {
+      isUpVote.value = !isUpVote.value;
+    }
     await questionRepository.dislikeQuestion(question, isDownVote.value);
+    final questionUpdate = await questionRepository.getQuestionDetail(question.id!);
+    numUpVote.value = questionUpdate.numUpVote!;
+    numDownVote.value = questionUpdate.numDownVote!;
 
   }
 

@@ -4,10 +4,10 @@ import 'package:blended_learning_appmb/common/widgets/image_text_widgets/vertica
 import 'package:blended_learning_appmb/common/widgets/question/question_card.dart';
 import 'package:blended_learning_appmb/common/widgets/texts/section_heading.dart';
 import 'package:blended_learning_appmb/features/question/controllers/class_controller.dart';
-import 'package:blended_learning_appmb/features/question/controllers/question_contoller.dart';
-import 'package:blended_learning_appmb/features/question/models/question_model.dart';
+import 'package:blended_learning_appmb/features/question/controllers/question_controller.dart';
 import 'package:blended_learning_appmb/features/question/screens/classes/classes.dart';
 import 'package:blended_learning_appmb/features/question/screens/q&a/add_new_question.dart';
+import 'package:blended_learning_appmb/features/question/screens/q&a/search_question.dart';
 import 'package:blended_learning_appmb/utils/constants/colors.dart';
 import 'package:blended_learning_appmb/utils/constants/image_strings.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
@@ -38,14 +38,14 @@ class QuestionScreen extends StatelessWidget {
           ),
           LCircularIcon(
             icon: Iconsax.search_normal,
-            onPressed: () {},
+            onPressed: () => Get.to(() => const SearchQuestionScreen()),
           ),
         ],
       ),
       body: SingleChildScrollView(
         // Class
         child: Padding(
-          padding: const EdgeInsets.all(LSizes.defaultSpace),
+          padding: const EdgeInsets.all(LSizes.md),
           child: Column(
             children: [
               LSectionHeading(

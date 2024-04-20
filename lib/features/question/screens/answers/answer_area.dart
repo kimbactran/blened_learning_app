@@ -1,16 +1,13 @@
 import 'package:blended_learning_appmb/common/widgets/appbar/appbar.dart';
 import 'package:blended_learning_appmb/features/question/controllers/answer_controller.dart';
 import 'package:blended_learning_appmb/features/question/models/answer_model.dart';
-import 'package:blended_learning_appmb/features/question/screens/answers/widgets/answers.dart';
 import 'package:blended_learning_appmb/utils/constants/colors.dart';
-import 'package:blended_learning_appmb/utils/constants/enums.dart';
-import 'package:comment_box/comment/comment.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../common/widgets/answer/answer_card.dart';
-import '../../../../common/widgets/question/question_card.dart';
+import '../../../../common/widgets/question/vote_widget.dart';
 import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/helpers/cloud_helper_functions.dart';
 
@@ -22,6 +19,10 @@ class AnswerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final answerController = AnswerController.instance;
+    answerController.isDownVote.value = answer.isDownVote!;
+    answerController.isUpVote.value = answer.isUpVote!;
+    answerController.numDownVote.value = answer.numDownVote!;
+    answerController.numUpVote.value = answer.numUpVote!;
     return Scaffold(
       appBar: const LAppBar(showBackArrow: true, title: Text("Answer Detail"),),
       body: SingleChildScrollView(
@@ -32,10 +33,22 @@ class AnswerScreen extends StatelessWidget {
               const SizedBox(
                 height: LSizes.spaceBtwItems / 2,
               ),
-              LAnswerCard(answer: answer, questionId: questionId, showNumOfAnswer: false, onActionDelete: () {
+              LAnswerCard(answer: answer, isShowVoteAction: false,
+                questionId: questionId, showNumOfAnswer: false, onActionDelete: () {
                 answerController.deleteAnswer(answer.id!);
                 Get.back();
-              },),
+              },
+              ),
+          // Action Vote
+              Obx(
+                      () => VoteWidget(isUpVote: answerController.isUpVote.value,
+                      isDownVote: answerController.isDownVote.value,
+                      numUpVote: answerController.numUpVote.value,
+                      numDownVote: answerController.numDownVote.value,
+                      isUpVoteAction: () => answerController.likeAnswer(answer),
+                      isDownVoteAction: () => answerController.dislikeAnswer(answer))
+
+              ),
 
           Padding(
             padding: const EdgeInsets.all(LSizes.sm),

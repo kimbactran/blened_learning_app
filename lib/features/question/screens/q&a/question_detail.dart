@@ -1,26 +1,26 @@
+
 import 'dart:ffi';
 
 import 'package:blended_learning_appmb/common/widgets/answer/answer_card.dart';
 import 'package:blended_learning_appmb/common/widgets/appbar/appbar.dart';
-import 'package:blended_learning_appmb/common/widgets/custom_shapes/containers/rounded_container.dart';
+import 'package:blended_learning_appmb/common/widgets/loaders/loaders.dart';
+import 'package:blended_learning_appmb/common/widgets/question/dislike_btn.dart';
+import 'package:blended_learning_appmb/common/widgets/question/vote_widget.dart';
 import 'package:blended_learning_appmb/common/widgets/tag_card/tag_card.dart';
-import 'package:blended_learning_appmb/common/widgets/user_card/user_card.dart';
 import 'package:blended_learning_appmb/common/widgets/user_card/user_card_question.dart';
 import 'package:blended_learning_appmb/features/question/controllers/answer_controller.dart';
-import 'package:blended_learning_appmb/features/question/controllers/question_contoller.dart';
-import 'package:blended_learning_appmb/features/question/models/answer_model.dart';
-import 'package:blended_learning_appmb/features/question/models/question_model.dart';
-import 'package:blended_learning_appmb/features/question/screens/answers/answer_area.dart';
+import 'package:blended_learning_appmb/features/question/controllers/question_controller.dart';
 import 'package:blended_learning_appmb/utils/constants/colors.dart';
-import 'package:blended_learning_appmb/utils/constants/enums.dart';
-import 'package:blended_learning_appmb/utils/constants/image_strings.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../../common/widgets/question/like_btn.dart';
+import '../../../../utils/constants/image_strings.dart';
 import '../../../../utils/helpers/cloud_helper_functions.dart';
+import '../../models/question_model.dart';
 
 // ignore: must_be_immutable
 class QuestionDetailScreen extends StatelessWidget {
@@ -38,18 +38,12 @@ class QuestionDetailScreen extends StatelessWidget {
     final answerController = Get.put(AnswerController());
     questionController.isDownVote.value = question.isDownVote!;
     questionController.isUpVote.value = question.isUpVote!;
+    questionController.numDownVote.value = question.numDownVote!;
+    questionController.numUpVote.value = question.numUpVote!;
 
     return Scaffold(
-      appBar: LAppBar(
-        title: Center(
-            child: LUserCardQuestion(
-          user: question.user!,
-          time: question.createdAt!, postId: question.id!,
-              onActionDelete: () {
-            questionController.deleteQuestion(question.id!);
-            Get.back();
-              },
-        )),
+      appBar: const LAppBar(
+        title: Text("Question Detail"),
         showBackArrow: true,
       ),
       body: SingleChildScrollView(
@@ -58,16 +52,24 @@ class QuestionDetailScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              LUserCardQuestion(
+                    user: question.user!,
+                    time: question.createdAt!, postId: question.id!,
+                    onActionDelete: () {
+                      questionController.deleteQuestion(question.id!);
+                      Get.back();
+                    },
+                  ),
               Html(
                 data: question.content,
               ),
               // Text(question.content!),
-              const SizedBox(
+              /*const SizedBox(
                 height: LSizes.spaceBtwItems,
               ),
               const Image(
                 image: AssetImage(LImages.classImage1),
-              ),
+              ),*/
               const SizedBox(
                 height: LSizes.spaceBtwItems,
               ),
@@ -79,70 +81,16 @@ class QuestionDetailScreen extends StatelessWidget {
               const SizedBox(
                 height: LSizes.spaceBtwItems,
               ),
-              Obx(
-                () => Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      flex: 1,
-                      child: Row(
-                        children: [
-                          IconButton(
-                            icon: const Icon(Iconsax.like),
-                            onPressed: () => questionController.likeQuestion(question),
-                            color: questionController.isUpVote.value
-                                ? Colors.red
-                                : Colors.grey,
-                          ),
-                          Text(question.numDownVote.toString()),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      width: LSizes.spaceBtwItems,
-                    ),
-                    Flexible(
-                      flex: 1,
-                      child: Row(
-                        children: [
-                          IconButton(
-                            icon: const Icon(Iconsax.dislike),
-                            onPressed: () => questionController.dislikeQuestion(question),
-                                
-                            color: questionController.isDownVote.value
-                                ? Colors.red
-                                : Colors.grey,
-                          ),
-                          Text(question.numDownVote.toString()),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      width: LSizes.spaceBtwItems,
-                    ),
-                    const Flexible(
-                      flex: 1,
-                      child: Wrap(
-                        children: [
-                          Icon(Iconsax.star),
-                          SizedBox(
-                            width: LSizes.spaceBtwItems,
-                          ),
-                          Text('0,0/5'),
-                          SizedBox(
-                            width: LSizes.spaceBtwItems,
-                          ),
-                          Text(
-                            '(0 đánh giá)',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+               Obx(
+                 () => VoteWidget(isUpVote: questionController.isUpVote.value,
+                     isDownVote: questionController.isDownVote.value,
+                     numUpVote: questionController.numUpVote.value,
+                     numDownVote: questionController.numDownVote.value,
+                     isUpVoteAction: () => questionController.likeQuestion(question),
+                     isDownVoteAction: () => questionController.dislikeQuestion(question))
+
+               ),
+
               const SizedBox(
                 height: LSizes.spaceBtwItems / 2,
               ),
@@ -155,7 +103,7 @@ class QuestionDetailScreen extends StatelessWidget {
                 child: Obx(
                   () => FutureBuilder(
                     key: Key(answerController.refreshData.value.toString()),
-                    future: answerController.getCommentOfPost('', question.id!, answerController.orderStatus.value.toString()),
+                    future: answerController.getCommentOfPost( question.id!, "", answerController.orderStatus.value.toString()),
                     builder: (context, snapshot) {
 
                       final widget = LCloudHelperFunctions.checkSingleRecordState(snapshot);
@@ -163,6 +111,7 @@ class QuestionDetailScreen extends StatelessWidget {
                       // Data found
 
                       final answers = snapshot.data!;
+
 
 
                       return Column(

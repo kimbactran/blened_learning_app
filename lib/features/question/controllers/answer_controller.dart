@@ -4,31 +4,45 @@ import 'package:blended_learning_appmb/features/question/models/answer_model.dar
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../utils/constants/enums.dart';
 
 class AnswerController extends GetxController {
   static AnswerController get instance => Get.find();
   RxBool refreshData = true.obs;
   RxBool refreshDataOnAns = true.obs;
   final orderStatus = 'HIGH_SCORES'.obs;
+  final isUpVote = false.obs;
+  final isDownVote = false.obs;
+  final numUpVote = 0.obs;
+  final numDownVote = 0.obs;
 
 
 
   final commentText = TextEditingController();
   final commentSubText = TextEditingController();
-  Rx<AnswerModel> anwsers = AnswerModel.empty().obs;
-  final comments = <String>[].obs;
   final answerRepository = Get.put(AnswerRepository());
 
   Future<List<AnswerModel>> getCommentOfPost(
+       String postId, String classId, String order) async {
+    try {
+      // Fetch Products
+      List<AnswerModel> answers = await answerRepository.getAnswerOfPost(postId, classId, order);
+      return answers.where((answer) => answer.parentId == null).toList();
+    } catch (e) {
+      LLoader.errorSnackBar(title: 'Oh Snap!, Something went wrong while load comment!', message: e.toString());
+      return [];
+    }
+  }
+
+  Future<int> getNumCommentOfPost(
       String classId, String postId, String order) async {
     try {
       // Fetch Products
       final answers = await answerRepository.getAnswerOfPost(postId, classId, order);
-      return answers.where((answer) => answer.parentId == null).toList();
+      final answersOfPost =  answers.where((answer) => answer.parentId == null).toList();
+      return answersOfPost.length;
     } catch (e) {
+      return 0;
       LLoader.errorSnackBar(title: 'Oh Snap!', message: e.toString());
-      return [];
     }
   }
 
@@ -85,6 +99,29 @@ class AnswerController extends GetxController {
     } catch (e) {
       LLoader.errorSnackBar(title: 'Oh Snap!', message: e.toString());
     }
+  }
+
+  void likeAnswer(AnswerModel answer) async {
+    isUpVote.value = !isUpVote.value;
+    if(isUpVote.value && isDownVote.value) {
+      isDownVote.value = !isDownVote.value;
+    }
+    await answerRepository.likeAnswer(answer, isUpVote.value);
+    final answerUpdate = await answerRepository.getAnswerDetail(answer.id!);
+    numUpVote.value = answerUpdate.numUpVote!;
+    numDownVote.value = answerUpdate.numDownVote!;
+
+  }
+
+  void dislikeAnswer(AnswerModel answer) async {
+    isDownVote.value = !isDownVote.value;
+    if(isUpVote.value && isDownVote.value) {
+      isUpVote.value = !isUpVote.value;
+    }
+    await answerRepository.dislikeAnswer(answer, isDownVote.value);
+    final answerUpdate = await answerRepository.getAnswerDetail(answer.id!);
+    numUpVote.value = answerUpdate.numUpVote!;
+    numDownVote.value = answerUpdate.numDownVote!;
   }
 
 }

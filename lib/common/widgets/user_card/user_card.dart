@@ -1,7 +1,5 @@
-import 'package:blended_learning_appmb/features/personalization/models/user_model.dart';
 import 'package:blended_learning_appmb/utils/constants/image_strings.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
-import 'package:blended_learning_appmb/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
 class LUserCard extends StatelessWidget {
@@ -9,7 +7,6 @@ class LUserCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final darkMode = LHelperFunctions.isDarkMode(context);
     return Column(
       children: [
         Row(

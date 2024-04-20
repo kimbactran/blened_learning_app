@@ -1,4 +1,6 @@
-import 'package:blended_learning_appmb/data/repositories/answer/answer_repository.dart';
+import 'package:blended_learning_appmb/common/widgets/question/dislike_btn.dart';
+import 'package:blended_learning_appmb/common/widgets/question/like_btn.dart';
+import 'package:blended_learning_appmb/common/widgets/question/vote_widget.dart';
 import 'package:blended_learning_appmb/features/question/models/question_model.dart';
 import 'package:blended_learning_appmb/features/question/screens/q&a/question_detail.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
@@ -19,15 +21,11 @@ class QuestionAction extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-         const Row(
-          children: [
-            Icon(Iconsax.message),
-            SizedBox(
-              width: LSizes.spaceBtwItems / 2,
-            ),
-            Text('5 answers')
-          ],
-        ),
+        VoteWidget(isUpVote: question.isUpVote!,
+            isDownVote: question.isDownVote!,
+            numUpVote: question.numUpVote!,
+            numDownVote: question.numDownVote!),
+          
         ElevatedButton(
           onPressed: () => Get.to(() => QuestionDetailScreen(
                 question: question,

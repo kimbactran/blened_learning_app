@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:blended_learning_appmb/common/widgets/loaders/loaders.dart';
 import 'package:blended_learning_appmb/data/repositories/class/class_repository.dart';
 import 'package:blended_learning_appmb/data/repositories/question/question_repository.dart';
-import 'package:blended_learning_appmb/data/repositories/tag_repository/tag_repository.dart';
 import 'package:blended_learning_appmb/features/question/models/class_model.dart';
 import 'package:blended_learning_appmb/features/question/models/tag_model.dart';
 import 'package:get/get.dart';
@@ -36,30 +35,23 @@ class ClassController extends GetxController {
           jsonList.map((course) => ClassModel.fromJson(course)).toList());
 
       // Assign number question in Class
-      allClasses.map((course) async => course.numberQuestion =
-          await questionRepository.numberQuestionInClass(course.id!));
-
-      // String userId = deviceStorage.read('User Id');
-      // String token = deviceStorage.read('Token');
-      // var url = Uri.parse(
-      //     'http://192.168.2.110:3001/v1/classrooms/classrooms-by-user/${userId}');
-      // var response = await http.get(
-      //   url,
-      //   headers: {
-      //     "Authorization": "Bearer ${token}",
-      //   },
-      // );
-      // if (response.statusCode == 200) {
-      //   print("get data success");
-      //   List jsonList = jsonDecode(response.body);
-      //   allClasses.assignAll(
-      //       jsonList.map((classes) => ClassModel.fromJson(classes)).toList());
-      //   print(allClasses.map((element) => element.title));
-      // }
+      allClasses.map((course) async =>
+      course.numberQuestion =
+      await questionRepository.numberQuestionInClass(course.id!));
     } catch (e) {
       LLoader.errorSnackBar(title: 'Oh Snap!', message: e.toString());
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<int> getNumQuestionOfClass(String classId) async {
+    try {
+      final numStr = await questionRepository.numberQuestionInClass(classId);
+      return int.parse(numStr);
+    } catch (e) {
+      LLoader.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      return 0;
     }
   }
 }

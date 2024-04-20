@@ -1,5 +1,4 @@
 import 'package:blended_learning_appmb/common/widgets/appbar/appbar.dart';
-import 'package:blended_learning_appmb/common/widgets/question/question_card.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 

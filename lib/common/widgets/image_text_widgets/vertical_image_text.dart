@@ -1,7 +1,6 @@
 import 'package:blended_learning_appmb/common/widgets/image/rounded_image.dart';
 import 'package:blended_learning_appmb/utils/constants/colors.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
-import 'package:blended_learning_appmb/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
 class LVerticalImageText extends StatelessWidget {
@@ -20,7 +19,6 @@ class LVerticalImageText extends StatelessWidget {
   final void Function()? onTap;
   @override
   Widget build(BuildContext context) {
-    final darkMode = LHelperFunctions.isDarkMode(context);
     return GestureDetector(
       onTap: onTap,
       child: Padding(

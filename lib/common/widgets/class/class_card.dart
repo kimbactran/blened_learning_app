@@ -1,13 +1,14 @@
 import 'package:blended_learning_appmb/common/widgets/custom_shapes/containers/circular_container.dart';
 import 'package:blended_learning_appmb/common/widgets/custom_shapes/containers/rounded_container.dart';
 import 'package:blended_learning_appmb/common/widgets/image/rounded_image.dart';
-import 'package:blended_learning_appmb/data/repositories/question/question_repository.dart';
+import 'package:blended_learning_appmb/features/question/controllers/class_controller.dart';
 import 'package:blended_learning_appmb/features/question/models/class_model.dart';
 import 'package:blended_learning_appmb/features/question/screens/classes/classes_details.dart';
-import 'package:blended_learning_appmb/utils/constants/colors.dart';
 import 'package:blended_learning_appmb/utils/constants/image_strings.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class LClassCard extends StatelessWidget {
@@ -23,6 +24,8 @@ class LClassCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final classController = ClassController.instance;
+     final num =  classController.getNumQuestionOfClass(course.id!);
     return GestureDetector(
       onTap: () => Get.to(() => const ClassDetailScreen()),
       child: Padding(
@@ -33,29 +36,28 @@ class LClassCard extends StatelessWidget {
           backgroundColor: Colors.transparent,
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Row(
-              children: [
-                LRoundedImage(
-                  imageUrl: image!,
-                  height: 60,
-                  width: 60,
-                ),
-                const SizedBox(
-                  width: LSizes.spaceBtwItems,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(course.title!),
-                    const Text("Semester II of the 2023 - 2024", maxLines: 1, overflow: TextOverflow.ellipsis,)
-                  ],
-                ),
-              ],
+            Flexible(
+              flex: 4,
+              child: Row(
+                children: [
+                  LRoundedImage(
+                    imageUrl: image!,
+                    height: 60,
+                    width: 60,
+                  ),
+                  const SizedBox(
+                    width: LSizes.spaceBtwItems,
+                  ),
+              
+                      Expanded(child: Text(course.title!, maxLines: 2, overflow: TextOverflow.ellipsis,)),
+                    
+                ],
+              ),
             ),
             LCircularContainer(
               padding: LSizes.sm,
               child: Text(
-                  course.numberQuestion != null ? course.numberQuestion! : '0', style: Theme.of(context).textTheme.bodyLarge,),
+                 '$num', style: Theme.of(context).textTheme.bodyLarge,),
             )
           ]),
         ),

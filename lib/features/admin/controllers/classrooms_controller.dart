@@ -34,7 +34,7 @@ class ClassroomsController extends GetxController {
         ///data successfully
         var data = List<ClassroomModel>.from(jsonDecode(response.body)
             .map((e) => ClassroomModel.fromJson(e))).toList();
-        if (data != null) {
+        if (data.isNotEmpty) {
           classrooms.value = data;
         }
       } else {

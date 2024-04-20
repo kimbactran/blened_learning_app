@@ -1,7 +1,6 @@
 import 'package:blended_learning_appmb/features/personalization/models/user_model.dart';
 import 'package:blended_learning_appmb/utils/constants/image_strings.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
-import 'package:blended_learning_appmb/utils/helpers/helper_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -23,7 +22,6 @@ class LUserCardQuestion extends StatelessWidget {
   Widget build(BuildContext context) {
     final deviceStorage = GetStorage();
     bool showPopUpMenu = user.id! == deviceStorage.read("User Id");
-    final darkMode = LHelperFunctions.isDarkMode(context);
     return Column(
       children: [
         Row(

@@ -1,10 +1,8 @@
 import 'package:blended_learning_appmb/common/widgets/custom_shapes/containers/rounded_container.dart';
-import 'package:blended_learning_appmb/features/question/controllers/tag_controller.dart';
 import 'package:blended_learning_appmb/features/question/models/tag_model.dart';
 import 'package:blended_learning_appmb/utils/constants/colors.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class LTagCard extends StatelessWidget {

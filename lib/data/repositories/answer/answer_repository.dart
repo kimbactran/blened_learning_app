@@ -21,11 +21,27 @@ class AnswerRepository extends GetxController {
       if (response.statusCode == 200) {
         List jsonList = jsonDecode(response.body);
         return jsonList
-            .map((classes) => AnswerModel.fromJson(classes))
+            .map((answers) => AnswerModel.fromJson(answers))
             .toList();
       } else {
         throw Exception('Failed to load data ${response.statusCode}');
       }
+    } catch (e) {
+      final message = e.toString();
+      throw '$message. Please try again!';
+    }
+  }
+
+  Future<AnswerModel> getAnswerDetail(String answerId) async {
+    try {
+      String token = deviceStorage.read('Token');
+      var endpoint = LApi.commentApi.comment + '/${answerId}';
+      var response = await LHttpHelper.get(endpoint, token);
+      if (response.statusCode == 200) {
+        var json = jsonDecode(response.body);
+        return AnswerModel.fromJson(json);
+      }
+      throw ('Something went wrong while get question. Status code: ${response.statusCode}');
     } catch (e) {
       final message = e.toString();
       throw '$message. Please try again!';
@@ -82,6 +98,44 @@ class AnswerRepository extends GetxController {
         throw Exception('Failed to delete ${response.statusCode}');
       }
 
+    } catch (e) {
+      final message = e.toString();
+      throw '$message. Please try again!';
+    }
+  }
+
+  Future<bool> likeAnswer(AnswerModel answer, bool status) async {
+    try {
+      String token = deviceStorage.read('Token');
+      var endpoint = LApi.commentApi.voteComment + '/${answer.id}';
+      Map body = {
+        'isUpVote' : status,
+      };
+      var response = await LHttpHelper.put(endpoint, body, token);
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw Exception('Failed to load data ${response.statusCode}');
+      }
+    } catch (e) {
+      final message = e.toString();
+      throw '$message. Please try again!';
+    }
+  }
+
+  Future<bool> dislikeAnswer(AnswerModel answer, bool status) async {
+    try {
+      String token = deviceStorage.read('Token');
+      Map body = {
+        'isDownVote' : status,
+      };
+      var endpoint = LApi.commentApi.voteComment + '/${answer.id}';
+      var response = await LHttpHelper.put(endpoint, body, token);
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw Exception('Failed to load data ${response.statusCode}');
+      }
     } catch (e) {
       final message = e.toString();
       throw '$message. Please try again!';

@@ -15,6 +15,7 @@ class QuestionModel {
   bool? isUpVote;
   bool? isDownVote;
   List<AnswerModel>? answers;
+  String? classId;
 
   QuestionModel({
     this.createdAt,
@@ -29,6 +30,8 @@ class QuestionModel {
     this.isUpVote,
     this.isDownVote,
   });
+
+  static QuestionModel empty() => QuestionModel();
 
   QuestionModel.fromJson(Map<String, dynamic> json) {
     createdAt = json['createdAt'];
@@ -47,6 +50,26 @@ class QuestionModel {
     numDownVote = json['numDownVote'];
     isUpVote = json['isUpVote'];
     isDownVote = json['isDownVote'];
+  }
+
+  QuestionModel.fromJsonWithClass(Map<String, dynamic> json, String classId) {
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    id = json['id'];
+    title = json['title'];
+    content = json['content'];
+    user = json['user'] != null ? UserModel.fromJson(json['user']) : null;
+    if (json['tags'] != null) {
+      tags = <TagModel>[];
+      json['tags'].forEach((v) {
+        tags!.add(TagModel.fromJson(v));
+      });
+    }
+    numUpVote = json['numUpVote'];
+    numDownVote = json['numDownVote'];
+    isUpVote = json['isUpVote'];
+    isDownVote = json['isDownVote'];
+    classId = classId;
   }
 
   Map<String, dynamic> toJson() {

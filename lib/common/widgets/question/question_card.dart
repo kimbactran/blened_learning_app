@@ -1,4 +1,3 @@
-import 'package:blended_learning_appmb/common/widgets/user_card/user_card.dart';
 import 'package:blended_learning_appmb/common/widgets/image/rounded_image.dart';
 import 'package:blended_learning_appmb/common/widgets/question/question_action.dart';
 import 'package:blended_learning_appmb/common/widgets/tag_card/tag_card.dart';
@@ -11,7 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 
-import '../../../features/question/controllers/question_contoller.dart';
+import '../../../features/question/controllers/question_controller.dart';
+
 
 class LQuestionCard extends StatelessWidget {
   const LQuestionCard({super.key, required this.question});
@@ -37,10 +37,10 @@ class LQuestionCard extends StatelessWidget {
           const SizedBox(
             height: LSizes.spaceBtwItems,
           ),
-          const LRoundedImage(imageUrl: LImages.classImage1),
+          /*const LRoundedImage(imageUrl: LImages.classImage1),
           const SizedBox(
             height: LSizes.spaceBtwItems,
-          ),
+          ),*/
           Wrap(
             spacing: LSizes.defaultSpace,
             children: question.tags!.map((tag) => LTagCard(tag: tag)).toList(),
