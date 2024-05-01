@@ -44,6 +44,8 @@ class LoginController extends GetxController {
           email.text.trim().toString(), password.text.trim().toString());
       deviceStorage.write('Token', authenticationRepository.token.accessToken);
       deviceStorage.write('User Id', authenticationRepository.user.id);
+      deviceStorage.write('Role', authenticationRepository.user.role);
+
       final role = authenticationRepository.user.role;
       LFullScreenLoader.stopLoading();
       if (role == 'ADMIN') {

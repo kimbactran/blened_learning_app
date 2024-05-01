@@ -1,5 +1,4 @@
 
-import 'dart:ffi';
 
 import 'package:blended_learning_appmb/common/widgets/answer/answer_card.dart';
 import 'package:blended_learning_appmb/common/widgets/appbar/appbar.dart';
@@ -10,6 +9,7 @@ import 'package:blended_learning_appmb/common/widgets/tag_card/tag_card.dart';
 import 'package:blended_learning_appmb/common/widgets/user_card/user_card_question.dart';
 import 'package:blended_learning_appmb/features/question/controllers/answer_controller.dart';
 import 'package:blended_learning_appmb/features/question/controllers/question_controller.dart';
+import 'package:blended_learning_appmb/features/question/screens/q&a/edit_question.dart';
 import 'package:blended_learning_appmb/utils/constants/colors.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -17,10 +17,9 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../../../common/widgets/question/like_btn.dart';
-import '../../../../utils/constants/image_strings.dart';
 import '../../../../utils/helpers/cloud_helper_functions.dart';
 import '../../models/question_model.dart';
+import '../answers/edit_answer_screen.dart';
 
 // ignore: must_be_immutable
 class QuestionDetailScreen extends StatelessWidget {
@@ -59,6 +58,7 @@ class QuestionDetailScreen extends StatelessWidget {
                       questionController.deleteQuestion(question.id!);
                       Get.back();
                     },
+                    onActionEdit: () => Get.to(() => EditQuestionScreen(question: question)),
                   ),
               Html(
                 data: question.content,
@@ -96,14 +96,12 @@ class QuestionDetailScreen extends StatelessWidget {
               ),
               const Divider(),
 
-
-
               Padding(
                 padding: const EdgeInsets.all(LSizes.sm),
                 child: Obx(
                   () => FutureBuilder(
                     key: Key(answerController.refreshData.value.toString()),
-                    future: answerController.getCommentOfPost( question.id!, "", answerController.orderStatus.value.toString()),
+                    future: answerController.getCommentOfPost(question.id!, "", answerController.orderStatus.value.toString()),
                     builder: (context, snapshot) {
 
                       final widget = LCloudHelperFunctions.checkSingleRecordState(snapshot);
@@ -129,7 +127,7 @@ class QuestionDetailScreen extends StatelessWidget {
                                     TextButton(onPressed: ()=> answerController.changeOrder('DESC'), child: Text("New", style: Theme.of(context).textTheme.labelMedium?.apply(color: answerController.orderStatus.value == 'DESC' ? LColors.error : LColors.black),),),
 
                                   ],
-                                                               ),
+                               ),
                                ),
                             ],
                           ),
@@ -142,7 +140,11 @@ class QuestionDetailScreen extends StatelessWidget {
                               physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (_, index) {
 
-                                return LAnswerCard(answer: answers[index], questionId: question.id!, onActionDelete: () => answerController.deleteAnswer(answers[index].id!),);
+                                return LAnswerCard(answer: answers[index],
+                                  questionId: question.id!,
+                                  onActionDelete: () => answerController.deleteAnswer(answers[index].id!),
+                                  onActionEdit: () => Get.to(() => EditAnswerScreen(answer: answers[index])),
+                                );
                               }),
                         ],
                       );
@@ -175,7 +177,7 @@ class QuestionDetailScreen extends StatelessWidget {
                   color: LColors.primary1,
                 ),
                 onPressed: () => answerController.addComment(
-                    question.id!, 'c690d6d8-f429-47d2-8bfa-7fe9fb53527e'),
+                    question.id!, question.classId??""),
               ),
             ],
           ),

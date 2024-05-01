@@ -50,9 +50,10 @@ class QuestionModel {
     numDownVote = json['numDownVote'];
     isUpVote = json['isUpVote'];
     isDownVote = json['isDownVote'];
+    classId = "";
   }
 
-  QuestionModel.fromJsonWithClass(Map<String, dynamic> json, String classId) {
+  QuestionModel.fromJsonWithClass(Map<String, dynamic> json, String classroomId) {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     id = json['id'];
@@ -69,7 +70,7 @@ class QuestionModel {
     numDownVote = json['numDownVote'];
     isUpVote = json['isUpVote'];
     isDownVote = json['isDownVote'];
-    classId = classId;
+    classId = classroomId;
   }
 
   Map<String, dynamic> toJson() {

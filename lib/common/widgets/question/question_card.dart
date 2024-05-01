@@ -3,6 +3,7 @@ import 'package:blended_learning_appmb/common/widgets/question/question_action.d
 import 'package:blended_learning_appmb/common/widgets/tag_card/tag_card.dart';
 import 'package:blended_learning_appmb/common/widgets/user_card/user_card_question.dart';
 import 'package:blended_learning_appmb/features/question/models/question_model.dart';
+import 'package:blended_learning_appmb/features/question/screens/q&a/edit_question.dart';
 import 'package:blended_learning_appmb/features/question/screens/q&a/question_detail.dart';
 import 'package:blended_learning_appmb/utils/constants/image_strings.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
@@ -32,6 +33,7 @@ class LQuestionCard extends StatelessWidget {
             user: question.user!,
             time: question.createdAt!, postId: question.id!,
             onActionDelete: () => questionController.deleteQuestion(question.id!),
+            onActionEdit: () => Get.to(() => EditQuestionScreen(question: question)),
           ),
           Html(data: question.title!),
           const SizedBox(

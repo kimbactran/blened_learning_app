@@ -12,6 +12,9 @@ class ClassController extends GetxController {
   static ClassController get instance => Get.find();
 
   final isLoading = false.obs;
+  RxBool refreshData = true.obs;
+  RxBool refreshDataOnAns = true.obs;
+  final orderStatus = 'HIGH_SCORES'.obs;
   RxList<ClassModel> allClasses = <ClassModel>[].obs;
   RxList<TagModel> allTag = <TagModel>[].obs;
   final deviceStorage = GetStorage();
@@ -28,16 +31,14 @@ class ClassController extends GetxController {
     try {
       isLoading.value = true;
       // get data from API
-      var response = await classRepository.getAllClass();
-
-      List jsonList = jsonDecode(response.body);
-      allClasses.assignAll(
-          jsonList.map((course) => ClassModel.fromJson(course)).toList());
-
+      final courses = await classRepository.getAllClass();
+      allClasses.assignAll(courses);
       // Assign number question in Class
-      allClasses.map((course) async =>
-      course.numberQuestion =
-      await questionRepository.numberQuestionInClass(course.id!));
+      for(var course in allClasses) {
+        final numStr = await questionRepository.numberQuestionInClass(course.id!);
+        course.numberQuestion = numStr;
+      }
+      isLoading.value = false;
     } catch (e) {
       LLoader.errorSnackBar(title: 'Oh Snap!', message: e.toString());
     } finally {
@@ -45,13 +46,28 @@ class ClassController extends GetxController {
     }
   }
 
-  Future<int> getNumQuestionOfClass(String classId) async {
+  Future<List<ClassModel>> getAllClasses() async {
     try {
-      final numStr = await questionRepository.numberQuestionInClass(classId);
-      return int.parse(numStr);
+      isLoading.value = true;
+      // get data from API
+      final courses = await classRepository.getAllClass();
+      allClasses.assignAll(courses);
+      // Assign number question in Class
+      for(var course in allClasses) {
+        final numStr = await questionRepository.numberQuestionInClass(course.id!);
+        course.numberQuestion = numStr;
+      }
+      return allClasses;
     } catch (e) {
+
       LLoader.errorSnackBar(title: 'Oh Snap!', message: e.toString());
-      return 0;
+      return [];
     }
   }
+
+  void changeOrder(String status) {
+    orderStatus.value = status;
+    refreshData.toggle();
+  }
+
 }

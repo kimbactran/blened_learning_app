@@ -21,9 +21,12 @@ class AddNewQuestionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final questionController = QuestionController.instance;
     final classController = ClassController.instance;
-    final tagController = Get.put(TagController());
+    final tagController = TagController.instance;
+    questionController.classSelected.value = classController.allClasses[0];
+
 
     return Scaffold(
+
       appBar: LAppBar(
         title: Text("Add new Question",
             style: Theme.of(context).textTheme.headlineSmall),
@@ -62,50 +65,59 @@ class AddNewQuestionScreen extends StatelessWidget {
                     onChanged: (course) {
                       questionController.setClassSelected(course!);
                     },
-                  value: classController.allClasses[0],),
+                  value: classController.allClasses[0]),
                 const SizedBox(
                   height: LSizes.spaceBtwInputFields,
                 ),
 
-                Obx(
-            () {if(questionController.classSelected.value.id!.isNotEmpty) {
-              return Row
-            (
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        flex: 4,
-                        child: Text(
-                          'Select Tag',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall!
-                              .apply(color: LColors.black),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Flexible(
-                        flex: 11,
-                        child: Obx(
-                          () => Wrap(
+                Row
+                (
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    flex: 4,
+                    child: Text(
+                      'Select Tag',
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .bodySmall!
+                          .apply(color: LColors.black),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Flexible(
+                    flex: 11,
+                    child: Obx(
+                          () =>
+                          Wrap(
                             spacing: LSizes.defaultSpace,
                             children: tagController.selectedTags
-                                .map((tag) => LTagCard(tag: tag, showCancelBtn: true, maxline: 1, onCancel: () => tagController.removeTagFromSelected(tag),))
+                                .map((tag) =>
+                                LTagCard(tag: tag,
+                                  showCancelBtn: true,
+                                  maxline: 1,
+                                  onCancel: () =>
+                                      tagController.removeTagFromSelected(
+                                          tag),))
                                 .toList(),
                           ),
-                        ),
-                      ),
-                      IconButton(
-                        icon: Icon(Iconsax.arrow_right_34),
-                        iconSize: 18,
-                        onPressed: () => Get.to(() => TagScreen(
-                              classId: questionController.classSelected.value.id!,
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(Iconsax.arrow_right_34),
+                    iconSize: 18,
+                    onPressed: () =>
+                        Get.to(() =>
+                            TagScreen(
+                              classId: questionController.classSelected.value
+                                  .id!,
                             )),
-                      ),
-                    ],
-                  );
-            } else return Container();}
+                  ),
+                ],
+
+
                 ),
                 const SizedBox(
                   height: LSizes.spaceBtwInputFields,

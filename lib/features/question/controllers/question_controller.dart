@@ -6,6 +6,8 @@ import 'package:blended_learning_appmb/features/question/models/class_model.dart
 import 'package:blended_learning_appmb/features/question/models/question_model.dart';
 import 'package:blended_learning_appmb/features/question/models/tag_model.dart';
 import 'package:blended_learning_appmb/utils/constants/enums.dart';
+import 'package:quill_html_converter/quill_html_converter.dart';
+
 import 'package:blended_learning_appmb/utils/popups/full_screen_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -18,7 +20,6 @@ class QuestionController extends GetxController {
   static QuestionController get instance => Get.find();
   final deviceStorage = GetStorage();
 
-
   // Variable
   final title = TextEditingController();
   final isLoading = false.obs;
@@ -27,37 +28,27 @@ class QuestionController extends GetxController {
   final numUpVote = 0.obs;
   final numDownVote = 0.obs;
   RxBool refreshData = true.obs;
-
-  RxString classSelectedId = ''.obs;
-  Rx<ClassModel> classSelected = ClassModel.empty().obs;
-
   TextEditingController questionText = TextEditingController();
-  final questions = <String>[].obs;
-  final classController = Get.put(ClassController());
+  final classController = ClassController.instance;
   final answerRepository = Get.put(AnswerRepository());
   final questionRepository = QuestionRepository.instance;
   QuillController quillController = QuillController.basic();
 
 
   final comments = <String>[].obs;
-
-  RxList<QuestionModel> allQuestions = <QuestionModel>[].obs;
   RxList<TagModel> tags = <TagModel>[].obs;
+  Rx<ClassModel> classSelected = ClassModel.empty().obs;
+
 
   @override
   void onInit() async {
     super.onInit();
     isLoading.value = true;
     ever(classController.allClasses, (_) async {
-
-
-
       tags.assignAll(
           await questionRepository.getAllTags(classController.allClasses));
       classSelected.value = classController.allClasses[0];
     });
-
-
     isLoading.value = false;
   }
   Future<List<QuestionModel>> getQuestionByUser() async {
@@ -67,25 +58,20 @@ class QuestionController extends GetxController {
       List.from(questions.reversed);
       reversedQuestions.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
        return reversedQuestions;
-
-
     } catch (e) {
-
       LLoader.errorSnackBar(title: 'Oh Snap!', message: e.toString());
       return [];
     }
   }
 
-  Future<void> getQuestionInClass(String classId) async {
-    try {} catch (e) {
+  Future<List<QuestionModel>> getQuestionInClassWithSort(String classId, String sort) async {
+    try {
+      final questions = await questionRepository.getQuestionInClassWithSort(classId, sort);
+      return questions;
+    } catch (e) {
       LLoader.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      return [];
     }
-  }
-
-  @override
-  void onClose() {
-    questionText.dispose();
-    super.onClose();
   }
 
   Future<QuestionModel> getQuestionDetail(String questionId) async{
@@ -113,35 +99,26 @@ class QuestionController extends GetxController {
         await questionRepository.addQuestion(title.text.trim(), content, classroomId, tagIds);
         if (result) {
           Get.back();
-
           LLoader.successSnackBar(title: "Create question successfully", message: "Let's check answer");
-
           refreshData.toggle();
-
-
-        quillController.clear();
+          quillController.clear();
           quillController.dispose();
           quillController = QuillController.basic();
           title.clear();
-
-
-          //Get.off(() => const NavigationMenu());
         } else {
           LFullScreenLoader.stopLoading();
-
           LLoader.errorSnackBar(
               title: 'Oh Snap!',
               message: 'Something went wrong when add question!');
         }
       }
-
     } catch (error) {
       LFullScreenLoader.stopLoading();
       LLoader.errorSnackBar(title: 'Oh Snap!', message: error.toString());
     }
   }
 
-  void editQuestion(String classroomId, List<String> tagIds){}
+
 
 
   void likeQuestion(QuestionModel question) async {
@@ -153,7 +130,6 @@ class QuestionController extends GetxController {
       final questionUpdate = await questionRepository.getQuestionDetail(question.id!);
       numUpVote.value = questionUpdate.numUpVote!;
       numDownVote.value = questionUpdate.numDownVote!;
-
   }
 
   void dislikeQuestion(QuestionModel question) async {
@@ -176,11 +152,9 @@ void deleteQuestion(String questionId) async {
     try {
       await questionRepository.deleteQuestion(questionId);
       refreshData.toggle();
-
       LLoader.successSnackBar(title: "Delete Question Success!");
     } catch (e) {
       LLoader.errorSnackBar(title: 'Oh Snap!', message: e.toString());
     }
 }
-
 }

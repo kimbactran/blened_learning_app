@@ -4,56 +4,49 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:quill_html_converter/quill_html_converter.dart';
 
+import '../../../common/widgets/loaders/loaders.dart';
 import '../../../data/repositories/answer/answer_repository.dart';
 import '../../../data/repositories/question/question_repository.dart';
+import '../../../utils/popups/full_screen_loader.dart';
 import '../models/class_model.dart';
 import '../models/tag_model.dart';
+import 'package:quill_html_editor/quill_html_editor.dart';
 
 class EditQuestionController extends GetxController{
   static EditQuestionController get instance => Get.find();
 
   final deviceStorage = GetStorage();
   QuillController quillController = QuillController.basic();
-
-
   final title = TextEditingController();
-  Rx<ClassModel> classSelected = ClassModel.empty().obs;
-
-  // Variable
-  final isLoading = false.obs;
-  RxBool refreshData = true.obs;
-
-  RxString classSelectedId = ''.obs;
-
-
-  TextEditingController questionText = TextEditingController();
-  final questions = <String>[].obs;
-  final classController = Get.put(ClassController());
-  final answerRepository = Get.put(AnswerRepository());
+  final QuillEditorController controller = QuillEditorController();
   final questionRepository = QuestionRepository.instance;
-
-
-
-  RxList<QuestionModel> allQuestions = <QuestionModel>[].obs;
   RxList<TagModel> tags = <TagModel>[].obs;
 
-  @override
-  void onInit() async {
-    super.onInit();
-    isLoading.value = true;
-    ever(classController.allClasses, (_) async {
-
-
-
-      tags.assignAll(
-          await questionRepository.getAllTags(classController.allClasses));
-      classSelected.value = classController.allClasses[0];
-    });
-
-
-    isLoading.value = false;
+  void editQuestion(String postId, String classroomId, List<String> tagIds) async {
+    try {
+      if(title.text.trim().isEmpty || title.text.trim().trim().isEmpty ||
+          quillController.document.toPlainText().trim().isEmpty
+          || quillController.document.toPlainText().trim().trim().isEmpty|| tagIds.isEmpty) {
+        LLoader.customToast(message: "Please enter full the title, description and tags!" );
+      } else {
+        String content = await controller.getText();
+        bool result =
+            await questionRepository.editQuestion(postId,title.text.trim(), content, classroomId, tagIds);
+        if (result) {
+          Get.back();
+          LLoader.successSnackBar(title: "Edit question successfully", message: "Let's check answer");
+        } else {
+          LFullScreenLoader.stopLoading();
+          LLoader.errorSnackBar(
+              title: 'Oh Snap!',
+              message: 'Something went wrong when edit question!');
+        }
+      }
+    } catch (error) {
+      LFullScreenLoader.stopLoading();
+      LLoader.errorSnackBar(title: 'Oh Snap!', message: error.toString());
+    }
   }
-
-
 }

@@ -11,12 +11,9 @@ import 'package:get_storage/get_storage.dart';
 
 class QuestionRepository extends GetxController {
   static QuestionRepository get instance => Get.find();
-  final classRepository = ClassRepository.instance;
 
   // Variable
   final deviceStorage = GetStorage();
-  RxList<QuestionModel> allQuestion = <QuestionModel>[].obs;
-  RxList<TagModel> tags = <TagModel>[].obs;
 
   Future<List<QuestionModel>> getQuestionInClass(String classId) async {
     try {
@@ -37,16 +34,35 @@ class QuestionRepository extends GetxController {
     }
   }
 
+  Future<List<QuestionModel>> getQuestionInClassWithSort(String classId, String sort) async {
+    try {
+      String token = deviceStorage.read('Token');
+      var endpoint = LApi.postApi.postInClassroom + '/${classId}?order=${sort}';
+      var response = await LHttpHelper.get(endpoint, token);
+      if (response.statusCode == 200) {
+        List jsonList = jsonDecode(response.body);
+        return jsonList
+            .map((question) => QuestionModel.fromJsonWithClass(question, classId))
+            .toList();
+      } else {
+        throw Exception('Failed to load data ${response.statusCode}');
+      }
+    } catch (e) {
+      final message = e.toString();
+      throw '$message. Please try again!';
+    }
+  }
+
   Future<List<QuestionModel>> getQuestionByUser(
       List<ClassModel> classes) async {
     try {
-      List<QuestionModel> allQuestion = [];
+      List<QuestionModel> allQuestions = [];
       for (var course in classes) {
         // Lấy lớp
         List<QuestionModel> questions = await getQuestionInClass(course.id!);
-        allQuestion.addAll(questions);
+        allQuestions.addAll(questions);
       }
-      return allQuestion;
+      return allQuestions;
     } catch (e) {
       final message = e.toString();
       throw '$message. Please try again!';
@@ -103,7 +119,7 @@ class QuestionRepository extends GetxController {
     }
   }
 
-  Future<bool> editQuestion(
+  Future<bool> editQuestion(String postId,
       String title, String content, String classroomId, List<String> tagIds) async {
     try {
       Map body = {
@@ -113,7 +129,7 @@ class QuestionRepository extends GetxController {
         'tagIds': tagIds
       };
       String token = deviceStorage.read('Token');
-      var endpoint = LApi.postApi.post;
+      var endpoint = LApi.postApi.post + "/${postId}";
       var response = await LHttpHelper.put(endpoint, body, token);
       if (response.statusCode == 200) {
         print(jsonDecode(response.body));
@@ -206,6 +222,7 @@ class QuestionRepository extends GetxController {
 
   Future<List<TagModel>> getAllTags(List<ClassModel> classes) async {
     try {
+      List<TagModel> tags = [];
       for (var course in classes) {
         // Lấy lớp
         List<TagModel> tag = await getTagInClass(course.id!);

@@ -1,17 +1,20 @@
+import 'dart:convert';
+
+import 'package:blended_learning_appmb/features/question/controllers/edit_question_controller.dart';
 import 'package:blended_learning_appmb/features/question/models/question_model.dart';
+import 'package:blended_learning_appmb/utils/helpers/html_to_delta_converter.dart';
+import 'package:blended_learning_appmb/utils/helpers/permission_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:quill_html_editor/quill_html_editor.dart';
 
 import '../../../../common/widgets/appbar/appbar.dart';
 import '../../../../common/widgets/tag_card/tag_card.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/sizes.dart';
-import '../../controllers/class_controller.dart';
-import '../../controllers/question_controller.dart';
 import '../../controllers/tag_controller.dart';
-import '../../models/class_model.dart';
 import '../tag/tag.dart';
 
 class EditQuestionScreen extends StatelessWidget {
@@ -20,9 +23,17 @@ class EditQuestionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final questionController = QuestionController.instance;
-    final classController = ClassController.instance;
+    final editQuestionController = Get.put(EditQuestionController());
     final tagController = Get.put(TagController());
+    editQuestionController.title.text = question.title!;
+    //final jsonContent = jsonDecode(question.content!);
+    //editQuestionController.quillController.document = Document.fromJson(jsonContent);
+
+    var delta = HtmlToDeltaConverter.htmlToDelta(question.content!);
+    editQuestionController.quillController.document = Document()..insert(0, question.content!);
+    editQuestionController.tags.assignAll(question.tags!);
+    tagController.selectedTags.assignAll(question.tags!);
+    requestStoragePermission();
     return Scaffold(
       appBar: LAppBar(
         title: Text("Edit Question",
@@ -30,9 +41,9 @@ class EditQuestionScreen extends StatelessWidget {
         showBackArrow: true,
         actions: [
           OutlinedButton(
-              onPressed: () => questionController
-                  .editQuestion(questionController.classSelected.value.id.toString(), tagController.covertToListTag()),
-              child: const Text("Add question"))
+              onPressed: () => editQuestionController
+                  .editQuestion(question.id!, question.classId!, tagController.covertToListTag()),
+              child: const Text("Edit question"))
         ],
       ),
       body: SafeArea(
@@ -43,33 +54,15 @@ class EditQuestionScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextFormField(
-                  controller: questionController.title,
-                  initialValue: question.title,
+                  controller: editQuestionController.title,
                   decoration: const InputDecoration(labelText: "Title"),
                 ),
                 const SizedBox(
                   height: LSizes.spaceBtwInputFields,
                 ),
-
-                /*const SizedBox(
-                  height: LSizes.spaceBtwInputFields,
-                ),
-                DropdownButtonFormField<ClassModel>(
-                  decoration: const InputDecoration(labelText: "Class"),
-                  items: classController.allClasses
-                      .map((course) => DropdownMenuItem<ClassModel>(
-                      value: course, child: Text(course.title ?? "")))
-                      .toList(),
-                  onChanged: (course) {
-                    questionController.setClassSelected(course!);
-                  },
-                  value: classController.allClasses[0],)*/
                 const SizedBox(
                   height: LSizes.spaceBtwInputFields,
                 ),
-
-                Obx(
-                        () =>
                        Row
                         (
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -101,13 +94,13 @@ class EditQuestionScreen extends StatelessWidget {
                             icon: Icon(Iconsax.arrow_right_34),
                             iconSize: 18,
                             onPressed: () => Get.to(() => TagScreen(
-                              classId: questionController.classSelected.value.id!,
+                              classId: question.classId!,
                             )),
                           ),
                         ],
-                      )
+                      ),
 
-                ),
+
                 const SizedBox(
                   height: LSizes.spaceBtwInputFields,
                 ),
@@ -117,13 +110,12 @@ class EditQuestionScreen extends StatelessWidget {
                     .apply(color: LColors.black),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,),
-                QuillToolbar.simple(
-                  configurations: QuillSimpleToolbarConfigurations(
-                    controller: questionController.quillController,
-                    sharedConfigurations: const QuillSharedConfigurations(
-                      locale: Locale('en'),
-                    ),
-                  ),
+                ToolBar(
+                  toolBarColor: Colors.cyan.shade50,
+                  activeIconColor: Colors.green,
+                  padding: const EdgeInsets.all(8),
+                  iconSize: 25,
+                  controller: editQuestionController.controller,
                 ),
                 const SizedBox(
                   height: LSizes.spaceBtwInputFields,
@@ -136,14 +128,28 @@ class EditQuestionScreen extends StatelessWidget {
                     ),
                   ),
                   height: 200,
-                  child: QuillEditor.basic(
-                    configurations: QuillEditorConfigurations(
-                      controller: questionController.quillController,
-                      readOnly: false,
-                      sharedConfigurations: const QuillSharedConfigurations(
-                        locale: Locale('en'),
-                      ),
-                    ),
+                  child:  QuillHtmlEditor(
+                    text: question.content,
+                    hintText: 'Enter your answer',
+                    controller: editQuestionController.controller,
+                    isEnabled: true,
+                    minHeight: 300,
+                    hintTextAlign: TextAlign.start,
+                    padding: const EdgeInsets.only(left: 10, top: 5),
+                    hintTextPadding: EdgeInsets.zero,
+                    onFocusChanged: (hasFocus) => debugPrint('has focus $hasFocus'),
+                    onTextChanged: (text) => debugPrint('widget text change $text'),
+                    onEditorCreated: () => debugPrint('Editor has been loaded'),
+                    onEditingComplete: (s) => debugPrint('Editing completed $s'),
+                    onEditorResized: (height) =>
+                        debugPrint('Editor resized $height'),
+                    onSelectionChanged: (sel) =>
+                        debugPrint('${sel.index},${sel.length}'),
+                    loadingBuilder: (context) {
+                      return const Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 0.4,
+                          ));},
                   ),
                 ),
               ],
@@ -151,6 +157,7 @@ class EditQuestionScreen extends StatelessWidget {
           ),
         ),
       ),
-    );;
+    );
   }
 }
+

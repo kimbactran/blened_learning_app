@@ -21,7 +21,7 @@ class QuestionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final questionController = Get.put(QuestionController());
+    final questionController = QuestionController.instance;
     final classController = ClassController.instance;
 
     return Scaffold(
@@ -51,38 +51,24 @@ class QuestionScreen extends StatelessWidget {
               LSectionHeading(
                 title: "My Classes",
                 showActionButton: true,
-                onPressed: () => Get.to(() => const ClassesScreen()),
+                onPressed: () => Get.to(() => const ClassesScreen(showBackArrow: true,)),
               ),
-              Obx(() {
-                if (classController.isLoading.value) {
-                  return const Center(
-                    child: Image(image: AssetImage(LImages.loaderThreeDot)),
-                  );
-                }
-                if (classController.allClasses.isEmpty) {
-                  return Center(
-                    child: Text(
-                      'No Data Found!',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .apply(color: Colors.white),
-                    ),
-                  );
-                }
-                return Obx(
-                  () => SizedBox(
-                    height: 80,
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: classController.allClasses.length,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (_, index) {
-                          return LVerticalImageText(
-                              image: LImages.classImage,
-                              title: classController.allClasses[index].title!);
-                        }),
-                  ),
+              FutureBuilder(future: classController.getAllClasses(), builder: (context, snapshot) {
+                final widget = LCloudHelperFunctions.checkSingleRecordState(snapshot);
+                if(widget != null) return widget;
+                // Data found
+                final courses = snapshot.data;
+                return SizedBox(
+                  height: 80,
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: classController.allClasses.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (_, index) {
+                        return LVerticalImageText(
+                            image: LImages.classImage,
+                            title: classController.allClasses[index].title!);
+                      }),
                 );
               }),
               const Divider(),
@@ -101,11 +87,6 @@ class QuestionScreen extends StatelessWidget {
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (_, index) {
-                        //
-
-
-                          // return Text("đây là 1 câu hỏi");
-
                           return LQuestionCard(question: questions![index],);
 
                       },

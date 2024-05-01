@@ -1,6 +1,7 @@
 import 'package:blended_learning_appmb/common/widgets/appbar/appbar.dart';
 import 'package:blended_learning_appmb/features/question/controllers/answer_controller.dart';
 import 'package:blended_learning_appmb/features/question/models/answer_model.dart';
+import 'package:blended_learning_appmb/features/question/screens/answers/edit_answer_screen.dart';
 import 'package:blended_learning_appmb/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -90,7 +91,11 @@ class AnswerScreen extends StatelessWidget {
                           itemCount: answers.length,
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (_, index) {
-                            return LAnswerCard(answer: answers[index], questionId: questionId,showNumOfAnswer: false, onActionDelete: () => answerController.deleteAnswer(answer.id!),);
+                            return LAnswerCard(answer: answers[index],
+                              questionId: questionId,showNumOfAnswer: false,
+                              onActionDelete: () => answerController.deleteAnswer(answer.id!),
+                              onActionEdit: () => Get.to(() => EditAnswerScreen(answer: answer)),
+                            );
                           }),
                     ],
                   );

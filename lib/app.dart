@@ -3,6 +3,8 @@ import 'package:blended_learning_appmb/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'bindings/general_bindings.dart';
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -14,6 +16,7 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       theme: LAppTheme.lightTheme,
       darkTheme: LAppTheme.darkTheme,
+      initialBinding: GeneralBindings(),
     );
   }
 }

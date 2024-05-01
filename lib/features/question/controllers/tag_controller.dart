@@ -2,6 +2,7 @@ import 'package:blended_learning_appmb/common/widgets/loaders/loaders.dart';
 import 'package:blended_learning_appmb/data/repositories/tag_repository/tag_repository.dart';
 import 'package:blended_learning_appmb/features/question/models/tag_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_simple_treeview/flutter_simple_treeview.dart';
 import 'package:get/get.dart';
 
 class TagController extends GetxController {
@@ -10,7 +11,6 @@ class TagController extends GetxController {
   final tagRepository = Get.put(TagRepository());
   final tag = TextEditingController();
   RxBool refreshData = true.obs;
-
 
   RxList<TagModel> selectedTags = <TagModel>[].obs;
   RxList<TagModel> selectedFreeTags = <TagModel>[].obs;
@@ -49,12 +49,22 @@ class TagController extends GetxController {
   }
 
   void onSelectedTag(TagModel tag) {
-    print('trap');
     if (isSelectedTag(tag)) {
       selectedTags.remove(tag);
     } else {
       selectedTags.add(tag);
     }
+  }
+
+  TagModel tagNode(String classId, List<TagModel> tags) {
+    return tags.firstWhere((tag) => tag.id == classId, orElse: () => TagModel.empty());
+  }
+
+  TreeNode buildNode(TagModel tagNode, List<TagModel> tags) {
+    return TreeNode(
+        content: Expanded(child: Text(tagNode.tag!, maxLines: 2,)),
+        children: tags.where((tag) => tag.parentId == tagNode.id).map((tag) => buildNode(tag, tags)).toList()
+    );
   }
 
   bool isSelectedTag(TagModel tag) {
@@ -74,9 +84,6 @@ class TagController extends GetxController {
         LLoader.successSnackBar(title: "Add Tag Success", message: "Let's add some question with new tag");
         tag.clear();
       }
-
-
-
     } catch (e) {
       LLoader.errorSnackBar(title: 'Oh Snap!', message: e.toString());
       return [];

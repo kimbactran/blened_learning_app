@@ -15,7 +15,7 @@ class ClassRepository extends GetxController {
   RxList<ClassModel> allClasses = <ClassModel>[].obs;
   final deviceStorage = GetStorage();
 
-  Future<http.Response> getAllClass() async {
+  Future<List<ClassModel>> getAllClass() async {
     try {
       String userId = deviceStorage.read('User Id');
       String token = deviceStorage.read('Token');
@@ -25,7 +25,7 @@ class ClassRepository extends GetxController {
         List jsonList = jsonDecode(response.body);
         allClasses.assignAll(
             jsonList.map((classes) => ClassModel.fromJson(classes)).toList());
-        return response;
+        return allClasses;
       } else {
         throw Exception('Failed to load data ${response.statusCode}');
       }

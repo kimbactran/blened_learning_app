@@ -102,26 +102,34 @@ class AnswerController extends GetxController {
   }
 
   void likeAnswer(AnswerModel answer) async {
-    isUpVote.value = !isUpVote.value;
+    print(answer.numUpVote);
+    isUpVote.value = !isUpVote.value;if(isUpVote.value) {
+      numUpVote.value = numUpVote.value + 1;
+    } else {
+      numUpVote.value = numUpVote.value - 1;
+    }
+
     if(isUpVote.value && isDownVote.value) {
       isDownVote.value = !isDownVote.value;
+      numDownVote.value = numDownVote.value - 1;
+
     }
     await answerRepository.likeAnswer(answer, isUpVote.value);
-    final answerUpdate = await answerRepository.getAnswerDetail(answer.id!);
-    numUpVote.value = answerUpdate.numUpVote!;
-    numDownVote.value = answerUpdate.numDownVote!;
-
   }
 
   void dislikeAnswer(AnswerModel answer) async {
     isDownVote.value = !isDownVote.value;
+    if(isDownVote.value) {
+      numDownVote.value = numDownVote.value + 1;
+    } else {
+      numDownVote.value = numDownVote.value - 1;
+    }
     if(isUpVote.value && isDownVote.value) {
       isUpVote.value = !isUpVote.value;
+      numUpVote.value = numUpVote.value - 1;
     }
     await answerRepository.dislikeAnswer(answer, isDownVote.value);
-    final answerUpdate = await answerRepository.getAnswerDetail(answer.id!);
-    numUpVote.value = answerUpdate.numUpVote!;
-    numDownVote.value = answerUpdate.numDownVote!;
+
   }
 
 }

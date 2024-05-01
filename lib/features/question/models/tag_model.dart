@@ -14,6 +14,7 @@ class TagModel {
       this.parentId,
       this.type});
 
+  static TagModel empty() => TagModel();
   TagModel.fromJson(Map<String, dynamic> json) {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];

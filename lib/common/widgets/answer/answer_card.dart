@@ -17,7 +17,7 @@ import '../question/vote_widget.dart';
 class LAnswerCard extends StatelessWidget {
   const LAnswerCard({
     super.key,
-    required this.answer, required this.questionId, this.showNumOfAnswer = true, this.onActionDelete, this.isShowVoteAction = true,
+    required this.answer, required this.questionId, this.showNumOfAnswer = true, this.onActionDelete, this.isShowVoteAction = true, this.onActionEdit,
   });
 
   final AnswerModel answer;
@@ -25,6 +25,8 @@ class LAnswerCard extends StatelessWidget {
   final bool showNumOfAnswer;
   final bool isShowVoteAction;
   final Function()? onActionDelete;
+  final Function()? onActionEdit;
+
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,8 @@ class LAnswerCard extends StatelessWidget {
             LUserCardQuestion(
               user: answer.user!,
               time: answer.createdAt!, postId: answer.id!,
-              onActionDelete: () => onActionDelete?.call()
+              onActionDelete: () => onActionDelete?.call(),
+              onActionEdit: () => onActionEdit?.call(),
             ),
 
             Html(data: answer.content!),
@@ -77,13 +80,8 @@ class LAnswerCard extends StatelessWidget {
                 }else {
                   return Container(); // Trả về một widget rỗng khi không có dữ liệu
                 }
-
-
-
               }
             ),
-
-
             const SizedBox(
               height: LSizes.spaceBtwItems / 2,
             ),

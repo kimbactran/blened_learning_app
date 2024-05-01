@@ -141,4 +141,24 @@ class AnswerRepository extends GetxController {
       throw '$message. Please try again!';
     }
   }
+
+  Future<bool> editQuestion(String answerId, String content) async {
+    try {
+      String token = deviceStorage.read('Token');
+      Map body = {
+        'content': content,
+      };
+      var endpoint = LApi.commentApi.comment + '/${answerId}';
+      var response = await LHttpHelper.put(endpoint, body, token);
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        throw Exception('Something went wrong while edit answers ${response.statusCode}');
+      }
+
+    } catch (e) {
+      final message = e.toString();
+      throw '$message. Please try again!';
+    }
+  }
 }

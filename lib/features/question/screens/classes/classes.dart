@@ -5,16 +5,19 @@ import 'package:blended_learning_appmb/features/question/controllers/class_contr
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
-class ClassesScreen extends StatelessWidget {
-  const ClassesScreen({super.key});
+import '../../../../utils/constants/sizes.dart';
+import '../../../../utils/helpers/cloud_helper_functions.dart';
 
+class ClassesScreen extends StatelessWidget {
+  const ClassesScreen({super.key, this.showBackArrow = false});
+  final bool? showBackArrow;
   @override
   Widget build(BuildContext context) {
     final classController = ClassController.instance;
 
     return Scaffold(
       appBar: LAppBar(
-        showBackArrow: true,
+        showBackArrow: showBackArrow??false,
         title: Text('My Classes',
             style: Theme.of(context).textTheme.headlineSmall),
         actions: [
@@ -25,12 +28,25 @@ class ClassesScreen extends StatelessWidget {
         ],
       ),
       body: SingleChildScrollView(
-        child: Column(
-            children: classController.allClasses
-                .map((course) => LClassCard(showBorder: true, course: course))
-                .toList()
+        child: Padding(
+          padding: const EdgeInsets.all(LSizes.sm),
+          child: FutureBuilder(
+            future: classController.getAllClasses(),
+            builder: (context, snapshot) {
+              final widget = LCloudHelperFunctions.checkSingleRecordState(snapshot);
+              if(widget != null) return widget;
 
-            ),
+              final courses = snapshot.data;
+              return ListView.builder(itemCount: courses?.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (_, index) {
+                  return LClassCard(showBorder: true, course: courses![index]);
+                },);
+              // Data found
+            },
+          ),
+        )
       ),
     );
   }

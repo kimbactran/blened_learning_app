@@ -6,9 +6,7 @@ import 'package:blended_learning_appmb/features/question/models/class_model.dart
 import 'package:blended_learning_appmb/features/question/screens/classes/classes_details.dart';
 import 'package:blended_learning_appmb/utils/constants/image_strings.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class LClassCard extends StatelessWidget {
@@ -24,10 +22,8 @@ class LClassCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final classController = ClassController.instance;
-     final num =  classController.getNumQuestionOfClass(course.id!);
     return GestureDetector(
-      onTap: () => Get.to(() => const ClassDetailScreen()),
+      onTap: () => Get.to(() =>  ClassDetailScreen(course: course,)),
       child: Padding(
         padding: const EdgeInsets.all(LSizes.sm),
         child: LRoundedContainer(
@@ -48,7 +44,6 @@ class LClassCard extends StatelessWidget {
                   const SizedBox(
                     width: LSizes.spaceBtwItems,
                   ),
-              
                       Expanded(child: Text(course.title!, maxLines: 2, overflow: TextOverflow.ellipsis,)),
                     
                 ],
@@ -57,7 +52,7 @@ class LClassCard extends StatelessWidget {
             LCircularContainer(
               padding: LSizes.sm,
               child: Text(
-                 '$num', style: Theme.of(context).textTheme.bodyLarge,),
+                 '${course.numberQuestion ?? '0'}', style: Theme.of(context).textTheme.bodyLarge,),
             )
           ]),
         ),
