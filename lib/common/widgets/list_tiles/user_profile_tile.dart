@@ -4,6 +4,8 @@ import 'package:blended_learning_appmb/utils/constants/image_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../features/personalization/models/user_model.dart';
+
 class LUserProfileTile extends StatelessWidget {
   const LUserProfileTile({
     super.key,
@@ -11,11 +13,13 @@ class LUserProfileTile extends StatelessWidget {
     this.subTitle,
     this.imageUrl,
     this.onPressed,
+    required this.user,
   });
 
   final String? title, subTitle;
   final String? imageUrl;
   final VoidCallback? onPressed;
+  final UserModel user;
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -25,14 +29,14 @@ class LUserProfileTile extends StatelessWidget {
         height: 50,
       ),
       title: Text(
-        'Kiba Trn',
+        user.name??"Participants",
         style: Theme.of(context)
             .textTheme
             .headlineSmall!
             .apply(color: LColors.white),
       ),
       subtitle: Text(
-        'kimbactrancutebaby@gmail.com',
+        user.email??"user@gmail.com",
         style:
             Theme.of(context).textTheme.bodyMedium!.apply(color: LColors.white),
       ),

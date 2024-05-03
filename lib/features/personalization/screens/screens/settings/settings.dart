@@ -3,7 +3,11 @@ import 'package:blended_learning_appmb/common/widgets/custom_shapes/containers/p
 import 'package:blended_learning_appmb/common/widgets/list_tiles/settings_menu_tile.dart';
 import 'package:blended_learning_appmb/common/widgets/list_tiles/user_profile_tile.dart';
 import 'package:blended_learning_appmb/common/widgets/texts/section_heading.dart';
+import 'package:blended_learning_appmb/data/repositories/authentication/authentication_repository.dart';
 import 'package:blended_learning_appmb/features/personalization/screens/screens/profile/profile.dart';
+import 'package:blended_learning_appmb/features/question/screens/answers/answer_user.dart';
+import 'package:blended_learning_appmb/features/question/screens/q&a/question_of_user.dart';
+import 'package:blended_learning_appmb/features/question/screens/q&a/widgets/list_question.dart';
 import 'package:blended_learning_appmb/utils/constants/colors.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -11,13 +15,20 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../authentication/screens/login/login.dart';
+import '../../../../question/controllers/question_controller.dart';
+import '../../../../question/screens/tag/tag_user.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
+
   @override
   Widget build(BuildContext context) {
+    final authenticationRepository = AuthenticationRepository.instance;
+    final questionController = QuestionController.instance;
+    final _user = authenticationRepository.user;
     return Scaffold(
+
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -37,6 +48,7 @@ class SettingsScreen extends StatelessWidget {
 
                 /// User Profile card
                 LUserProfileTile(
+                  user: _user,
                   onPressed: () => Get.to(() => const ProfileScreen()),
                 ),
                 const SizedBox(
@@ -67,13 +79,20 @@ class SettingsScreen extends StatelessWidget {
                     icon: Iconsax.message_question,
                     title: 'My Question',
                     subTitle: 'Ask questions to improve your score',
-                    onTap: () {},
+                    onTap: () => Get.to(() =>  ListQuestion(title: "My Questions",getData: questionController.getQuestionOfUser(),)),
                   ),
                   LSettingsMenuTile(
                     icon: Iconsax.bag_tick,
                     title: 'My Answer',
                     subTitle: 'Your answers are very helpful in teaching',
-                    onTap: () {},
+                    onTap: () => Get.to(() => const AnswerOfUserScreen()),
+                  ),
+
+                  LSettingsMenuTile(
+                    icon: Iconsax.hashtag,
+                    title: 'All Tags',
+                    subTitle: 'Explore hashtags',
+                    onTap: () => Get.to(() => const TagOfUserScreen()),
                   ),
 
                   LSettingsMenuTile(

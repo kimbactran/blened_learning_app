@@ -14,16 +14,17 @@ class LClassCard extends StatelessWidget {
       {super.key,
       required this.showBorder,
       this.image = LImages.classImage1,
-      required this.course});
+      required this.course, this.onTap});
 
   final bool showBorder;
   final String? image;
   final ClassModel course;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.to(() =>  ClassDetailScreen(course: course,)),
+      onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.all(LSizes.sm),
         child: LRoundedContainer(

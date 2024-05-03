@@ -1,6 +1,7 @@
 import 'package:blended_learning_appmb/common/widgets/appbar/appbar.dart';
 import 'package:blended_learning_appmb/common/widgets/image/circular_image.dart';
 import 'package:blended_learning_appmb/common/widgets/texts/section_heading.dart';
+import 'package:blended_learning_appmb/data/repositories/authentication/authentication_repository.dart';
 import 'package:blended_learning_appmb/features/personalization/screens/screens/profile/widgets/profile_menu.dart';
 import 'package:blended_learning_appmb/utils/constants/colors.dart';
 import 'package:blended_learning_appmb/utils/constants/image_strings.dart';
@@ -13,6 +14,8 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authenticationRepository = AuthenticationRepository.instance;
+    final _user = authenticationRepository.user;
     final darkMode = LHelperFunctions.isDarkMode(context);
     return Scaffold(
       appBar: const LAppBar(
@@ -54,15 +57,15 @@ class ProfileScreen extends StatelessWidget {
             ),
             LProfileMenu(
               title: 'Name',
-              value: 'Kiba Trn',
+              value: _user.name??"",
               onPressed: () {},
             ),
             const SizedBox(
               height: LSizes.spaceBtwItems,
             ),
             LProfileMenu(
-              title: 'Username',
-              value: 'kiba_trn',
+              title: 'Role',
+              value: _user.role??"STUDENT",
               onPressed: () {},
             ),
             const SizedBox(
@@ -84,7 +87,7 @@ class ProfileScreen extends StatelessWidget {
             ),
             LProfileMenu(
               title: 'User ID',
-              value: '048474',
+              value: _user.id??"",
               onPressed: () {},
             ),
             const SizedBox(
@@ -92,36 +95,22 @@ class ProfileScreen extends StatelessWidget {
             ),
             LProfileMenu(
               title: 'E-mail',
-              value: 'kimbactrancutebaby@gmail.com',
+              value: _user.email??"",
               onPressed: () {},
             ),
             const SizedBox(
               height: LSizes.spaceBtwItems,
             ),
-            LProfileMenu(
-              title: 'Phone Number',
-              value: '0399523244',
-              onPressed: () {},
-            ),
-            const SizedBox(
-              height: LSizes.spaceBtwItems,
-            ),
+
             LProfileMenu(
               title: 'Gender',
-              value: 'Female',
+              value: _user.gender??"",
               onPressed: () {},
             ),
             const SizedBox(
               height: LSizes.spaceBtwItems,
             ),
-            LProfileMenu(
-              title: 'Date of Birth',
-              value: '5 Oct, 2002',
-              onPressed: () {},
-            ),
-            const SizedBox(
-              height: LSizes.spaceBtwItems,
-            ),
+            /*
             const Divider(),
             Center(
                 child: TextButton(
@@ -131,7 +120,7 @@ class ProfileScreen extends StatelessWidget {
                       .textTheme
                       .bodyMedium!
                       .apply(color: LColors.error)),
-            )),
+            )),*/
           ]),
 
           // Details

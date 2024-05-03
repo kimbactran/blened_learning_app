@@ -32,4 +32,6 @@ class AuthenticationRepository extends GetxController {
       throw 'Something went wrong when login. Please try again!, ${e.toString()}';
     }
   }
+
+
 }

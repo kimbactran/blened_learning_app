@@ -19,7 +19,7 @@ class AnswerController extends GetxController {
 
   final commentText = TextEditingController();
   final commentSubText = TextEditingController();
-  final answerRepository = Get.put(AnswerRepository());
+  final answerRepository = AnswerRepository.instance;
 
   Future<List<AnswerModel>> getCommentOfPost(
        String postId, String classId, String order) async {

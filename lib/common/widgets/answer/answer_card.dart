@@ -30,7 +30,7 @@ class LAnswerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final answerController = AnswerController.instance;
+    final answerController = Get.put(AnswerController());
     int? num = 0;
 
 

@@ -69,6 +69,66 @@ class QuestionRepository extends GetxController {
     }
   }
 
+  Future<List<QuestionModel>> getQuestionOfUser(
+      List<ClassModel> classes) async {
+    try {
+      String userId = deviceStorage.read('User Id');
+      List<QuestionModel> allQuestions = [];
+      for (var course in classes) {
+        // Lấy lớp
+        List<QuestionModel> questions = await getQuestionInClass(course.id!);
+        questions.forEach((question) {
+          if (question.user?.id == userId) {
+            allQuestions.add(question);
+          }
+        });
+      }
+      return allQuestions;
+    } catch (e) {
+      final message = e.toString();
+      throw '$message. Please try again!';
+    }
+  }
+
+  Future<List<QuestionModel>> getQuestionOfTag(
+      List<ClassModel> classes, TagModel tag) async {
+    try {
+      List<QuestionModel> allQuestions = [];
+      for (var course in classes) {
+        // Lấy lớp
+        List<QuestionModel> questions = await getQuestionInClass(course.id!);
+        questions.forEach((question) {
+          if (question.tags != null && question.tags!.any((tagCheck) => tagCheck.tag == tag.tag)) {
+            allQuestions.add(question);
+          }
+        });
+      }
+      return allQuestions;
+    } catch (e) {
+      final message = e.toString();
+      throw '$message. Please try again!';
+    }
+  }
+
+  Future<List<QuestionModel>> getQuestionsOfTag(
+      String classId, TagModel tag) async {
+    try {
+      List<QuestionModel> allQuestions = [];
+
+        List<QuestionModel> questions = await getQuestionInClass(classId);
+        questions.forEach((question) {
+          if (question.tags != null && question.tags!.any((tagCheck) => tagCheck.tag == tag.tag)) {
+            allQuestions.add(question);
+          }
+        });
+
+      return allQuestions;
+    } catch (e) {
+      final message = e.toString();
+      throw '$message. Please try again!';
+    }
+  }
+
   Future<String> numberQuestionInClass(String classId) async {
     try {
       List<QuestionModel> questions = await getQuestionInClass(classId);

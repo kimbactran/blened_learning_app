@@ -16,6 +16,8 @@ import 'package:quill_html_converter/quill_html_converter.dart';
 
 import 'package:get/get.dart';
 
+import '../models/answer_model.dart';
+
 class QuestionController extends GetxController {
   static QuestionController get instance => Get.find();
   final deviceStorage = GetStorage();
@@ -29,8 +31,10 @@ class QuestionController extends GetxController {
   final numDownVote = 0.obs;
   RxBool refreshData = true.obs;
   TextEditingController questionText = TextEditingController();
+  TextEditingController commentText = TextEditingController();
+
   final classController = ClassController.instance;
-  final answerRepository = Get.put(AnswerRepository());
+  final answerRepository = AnswerRepository.instance;
   final questionRepository = QuestionRepository.instance;
   QuillController quillController = QuillController.basic();
 
@@ -118,8 +122,11 @@ class QuestionController extends GetxController {
     }
   }
 
-
-
+  @override
+  void onClose() {
+    questionText.dispose();
+    super.onClose();
+  }
 
   void likeQuestion(QuestionModel question) async {
     isUpVote.value = !isUpVote.value;
@@ -143,6 +150,53 @@ class QuestionController extends GetxController {
     numDownVote.value = questionUpdate.numDownVote!;
 
   }
+
+  Future<List<QuestionModel>> getQuestionOfUser() async {
+    try {
+      final questions = await questionRepository.getQuestionOfUser(classController.allClasses);
+      List<QuestionModel> reversedQuestions =
+      List.from(questions.reversed);
+      reversedQuestions.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+      return reversedQuestions;
+    }catch (e) {
+      LLoader.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      return [];
+    }
+  }
+
+  Future<List<QuestionModel>> getQuestionOfTag(TagModel tag) async {
+    try {
+      final questions = await questionRepository.getQuestionOfTag(classController.allClasses, tag);
+      List<QuestionModel> reversedQuestions =
+      List.from(questions.reversed);
+      reversedQuestions.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+      return reversedQuestions;
+    }catch (e) {
+      LLoader.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      return [];
+    }
+  }
+
+
+
+  Future<List<AnswerModel>> getAnswerOfUser() async {
+    try {
+      List<QuestionModel> questions = await questionRepository.getQuestionByUser(classController.allClasses);
+      print(questions.length);
+        List<AnswerModel> answers = await answerRepository.getAnswerOfPostSortByUser(questions, 'HIGH_SCORES');
+        print(answers.length);
+      List<AnswerModel> reversedAnswers =
+      List.from(answers.reversed);
+      reversedAnswers.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+
+      return reversedAnswers;
+    }catch (e) {
+      LLoader.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      return [];
+    }
+  }
+
+
 
   void setClassSelected(ClassModel value) {
     classSelected.value = value;

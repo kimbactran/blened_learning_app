@@ -3,6 +3,7 @@ import 'package:blended_learning_appmb/data/repositories/authentication/authenti
 import 'package:blended_learning_appmb/features/admin/adminPage.dart';
 import 'package:blended_learning_appmb/features/teacher/teacherPage.dart';
 import 'package:blended_learning_appmb/navigation_menu.dart';
+import 'package:blended_learning_appmb/navigation_menu_teacher.dart';
 import 'package:blended_learning_appmb/utils/constants/image_strings.dart';
 import 'package:blended_learning_appmb/utils/popups/full_screen_loader.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class LoginController extends GetxController {
   static LoginController get instance => Get.find();
 
   // Variable
-  final authenticationRepository = Get.put(AuthenticationRepository());
+  final authenticationRepository = AuthenticationRepository.instance;
 
   final hidePassword = true.obs;
   final deviceStorage = GetStorage();
@@ -51,7 +52,7 @@ class LoginController extends GetxController {
       if (role == 'ADMIN') {
         Get.off(() => const AdminPage());
       } else if (role == 'TEACHER') {
-        Get.off(() => const TeacherPage());
+        Get.off(() => const NavigationTeacherMenu());
       } else if (role == 'STUDENT') {
         Get.off(() => const NavigationMenu());
       } else {

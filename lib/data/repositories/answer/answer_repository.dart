@@ -6,6 +6,8 @@ import 'package:blended_learning_appmb/utils/http/http_client.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+import '../../../features/question/models/question_model.dart';
+
 class AnswerRepository extends GetxController {
   static AnswerRepository get instance => Get.find();
 
@@ -27,6 +29,29 @@ class AnswerRepository extends GetxController {
         throw Exception('Failed to load data ${response.statusCode}');
       }
     } catch (e) {
+      final message = e.toString();
+      throw '$message. Please try again!';
+    }
+  }
+
+  Future<List<AnswerModel>> getAnswerOfPostSortByUser(
+      List<QuestionModel> questions, String order) async {
+    try {
+      List<AnswerModel> answersOfUser = [];
+      String userId = deviceStorage.read('User Id');
+      for(var question in questions) {
+        final answers = await getAnswerOfPost(question.id!, "", order);
+        for(var answer in answers) {
+          print(answer);
+          if(answer.user?.id == userId) {
+            answersOfUser.add(answer);
+            print(answer.id);
+          }
+        }
+      }
+      return answersOfUser;
+    } catch (e) {
+
       final message = e.toString();
       throw '$message. Please try again!';
     }

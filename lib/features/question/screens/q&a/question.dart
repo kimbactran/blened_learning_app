@@ -53,6 +53,7 @@ class QuestionScreen extends StatelessWidget {
                 showActionButton: true,
                 onPressed: () => Get.to(() => const ClassesScreen(showBackArrow: true,)),
               ),
+              const SizedBox(height: LSizes.spaceBtwInputFields,),
               FutureBuilder(future: classController.getAllClasses(), builder: (context, snapshot) {
                 final widget = LCloudHelperFunctions.checkSingleRecordState(snapshot);
                 if(widget != null) return widget;
@@ -71,7 +72,12 @@ class QuestionScreen extends StatelessWidget {
                       }),
                 );
               }),
+              const SizedBox(height: LSizes.spaceBtwInputFields,),
+
               const Divider(),
+              const SizedBox(
+                height: LSizes.spaceBtwItems,
+              ),
               Obx(
                 () => FutureBuilder(
                   key: Key(questionController.refreshData.value.toString()),

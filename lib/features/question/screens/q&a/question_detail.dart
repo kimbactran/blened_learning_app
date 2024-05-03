@@ -118,8 +118,7 @@ class QuestionDetailScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text('${answers.length} answers'),
-                               Obx(
-                               () => Row(
+                              Row(
                                   children: [
                                     TextButton(onPressed: () => answerController.changeOrder('HIGH_SCORES')
                                     , child: Text('Hot', style: Theme.of(context).textTheme.labelMedium?.apply(color: answerController.orderStatus.value == 'HIGH_SCORES' ? LColors.error : LColors.black),), ),
@@ -128,7 +127,7 @@ class QuestionDetailScreen extends StatelessWidget {
 
                                   ],
                                ),
-                               ),
+
                             ],
                           ),
                           const SizedBox(

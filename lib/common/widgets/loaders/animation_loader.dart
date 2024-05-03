@@ -34,7 +34,7 @@ class LAnimationLoaderWidget extends StatelessWidget {
         children: [
           Image.asset(animation,
               width: MediaQuery.of(context).size.width *
-                  0.8), // Display Lottie animation
+                  0.6), // Display Lottie animation
           const SizedBox(
             height: LSizes.defaultSpace,
           ),

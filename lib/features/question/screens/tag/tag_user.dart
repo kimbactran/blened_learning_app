@@ -2,7 +2,7 @@ import 'package:blended_learning_appmb/common/widgets/appbar/appbar.dart';
 import 'package:blended_learning_appmb/common/widgets/class/class_card.dart';
 import 'package:blended_learning_appmb/common/widgets/icons/circular_icon.dart';
 import 'package:blended_learning_appmb/features/question/controllers/class_controller.dart';
-import 'package:blended_learning_appmb/features/question/screens/classes/classes_details.dart';
+import 'package:blended_learning_appmb/features/question/screens/tag/list_tag.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -10,17 +10,17 @@ import 'package:iconsax/iconsax.dart';
 import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/helpers/cloud_helper_functions.dart';
 
-class ClassesScreen extends StatelessWidget {
-  const ClassesScreen({super.key, this.showBackArrow = false});
-  final bool? showBackArrow;
+class TagOfUserScreen extends StatelessWidget {
+  const TagOfUserScreen({super.key});
   @override
   Widget build(BuildContext context) {
     final classController = ClassController.instance;
 
+
     return Scaffold(
       appBar: LAppBar(
-        showBackArrow: showBackArrow??false,
-        title: Text('My Classes',
+        showBackArrow: true,
+        title: Text('All Tag',
             style: Theme.of(context).textTheme.headlineSmall),
         actions: [
           LCircularIcon(
@@ -44,7 +44,7 @@ class ClassesScreen extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (_, index) {
                   return LClassCard(showBorder: true, course: courses![index],
-                  onTap: () => Get.to(() =>  ClassDetailScreen(course: courses[index],)),);
+                    onTap: () => Get.to(() => ListTag(classId: courses[index].id!)),);
                 },);
               // Data found
             },

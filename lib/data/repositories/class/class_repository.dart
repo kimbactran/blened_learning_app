@@ -8,6 +8,8 @@ import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+import '../../../features/personalization/models/user_model.dart';
+
 class ClassRepository extends GetxController {
   static ClassRepository get instance => Get.find();
 
@@ -26,6 +28,25 @@ class ClassRepository extends GetxController {
         allClasses.assignAll(
             jsonList.map((classes) => ClassModel.fromJson(classes)).toList());
         return allClasses;
+      } else {
+        throw Exception('Failed to load data ${response.statusCode}');
+      }
+    } catch (e) {
+      final message = e.toString();
+      throw '$message. Please try again!';
+    }
+  }
+
+  Future<List<UserModel>> getUserOfClass(String classId) async {
+    try {
+      String token = deviceStorage.read('Token');
+      var endpoint = LApi.userApi.userInClassroom + '/${classId}';
+      var response = await LHttpHelper.get(endpoint, token);
+      if (response.statusCode == 200) {
+        List jsonList = jsonDecode(response.body);
+        final users =
+            jsonList.map((classes) => UserModel.fromJson(classes)).toList();
+        return users;
       } else {
         throw Exception('Failed to load data ${response.statusCode}');
       }
