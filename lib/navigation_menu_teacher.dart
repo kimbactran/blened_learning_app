@@ -1,5 +1,4 @@
 import 'package:blended_learning_appmb/features/personalization/screens/screens/settings/settings.dart';
-import 'package:blended_learning_appmb/features/question/screens/chat/chat.dart';
 import 'package:blended_learning_appmb/features/question/screens/classes/classes.dart';
 import 'package:blended_learning_appmb/features/question/screens/q&a/question.dart';
 import 'package:blended_learning_appmb/features/question/screens/report/report.dart';
@@ -8,6 +7,9 @@ import 'package:blended_learning_appmb/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+
+import 'features/question/screens/chat/chat.dart';
+import 'features/question/screens/chat/widgets/chats.dart';
 
 class NavigationTeacherMenu extends StatelessWidget {
   const NavigationTeacherMenu({super.key});
@@ -33,7 +35,8 @@ class NavigationTeacherMenu extends StatelessWidget {
               NavigationDestination(
                   icon: Icon(Iconsax.message_question), label: 'Q&A'),
               NavigationDestination(icon: Icon(Iconsax.book), label: 'Classes'),
-              NavigationDestination(icon: Icon(Iconsax.diagram), label: 'Report'),
+              NavigationDestination(
+                  icon: Icon(Iconsax.diagram), label: 'Report'),
               NavigationDestination(icon: Icon(Iconsax.message), label: 'Chat'),
               NavigationDestination(icon: Icon(Iconsax.user), label: 'Profile'),
             ]),

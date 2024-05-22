@@ -1,4 +1,5 @@
 import 'package:blended_learning_appmb/common/widgets/appbar/appbar.dart';
+import 'package:blended_learning_appmb/common/widgets/question/vote_answer_widget.dart';
 import 'package:blended_learning_appmb/features/question/controllers/answer_controller.dart';
 import 'package:blended_learning_appmb/features/question/models/answer_model.dart';
 import 'package:blended_learning_appmb/features/question/screens/answers/edit_answer_screen.dart';
@@ -8,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../common/widgets/answer/answer_card.dart';
-import '../../../../common/widgets/question/vote_widget.dart';
 import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/helpers/cloud_helper_functions.dart';
 
@@ -42,13 +42,8 @@ class AnswerScreen extends StatelessWidget {
               ),
           // Action Vote
               Obx(
-                      () => VoteWidget(isUpVote: answerController.isUpVote.value,
-                      isDownVote: answerController.isDownVote.value,
-                      numUpVote: answerController.numUpVote.value,
-                      numDownVote: answerController.numDownVote.value,
-                      isUpVoteAction: () => answerController.likeAnswer(answer),
-                      isDownVoteAction: () => answerController.dislikeAnswer(answer))
-
+                      () => VoteAnswerWidget(
+                        answer: answer)
               ),
 
           Padding(

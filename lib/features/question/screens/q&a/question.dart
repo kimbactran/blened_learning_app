@@ -21,7 +21,7 @@ class QuestionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final questionController = QuestionController.instance;
+    final questionController =     Get.put(QuestionController());
     final classController = ClassController.instance;
 
     return Scaffold(

@@ -1,5 +1,4 @@
 import 'package:blended_learning_appmb/features/personalization/screens/screens/settings/settings.dart';
-import 'package:blended_learning_appmb/features/question/screens/chat/chat.dart';
 import 'package:blended_learning_appmb/features/question/screens/classes/classes.dart';
 import 'package:blended_learning_appmb/features/question/screens/q&a/question.dart';
 import 'package:blended_learning_appmb/features/question/screens/rank/rank.dart';
@@ -8,6 +7,9 @@ import 'package:blended_learning_appmb/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+
+import 'features/question/screens/chat/chat.dart';
+import 'features/question/screens/chat/widgets/chats.dart';
 
 class NavigationMenu extends StatelessWidget {
   const NavigationMenu({super.key});

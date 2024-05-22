@@ -18,7 +18,7 @@ class QuestionInClassScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final classController = ClassController.instance;
-    final questionController = QuestionController.instance;
+    final questionController = Get.put(QuestionController());
     return Scaffold(
       appBar: LAppBar(
         title: Text("Question in Classes",

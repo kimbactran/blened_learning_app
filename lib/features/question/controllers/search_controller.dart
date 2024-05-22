@@ -12,27 +12,34 @@ class SearchQuestionController extends GetxController{
 
   final keyword = TextEditingController();
   RxBool refreshData = true.obs;
-
+  List<ClassModel> allClasses = <ClassModel>[].obs;
+  List<QuestionModel> questions = <QuestionModel>[].obs;
+  Rx<ClassModel> classSelected = ClassModel.empty().obs;
+  final isLoading = false.obs;
 
 
   final questionRepository = QuestionRepository.instance;
   final classController = ClassController.instance;
-  Rx<ClassModel> classSelected = ClassModel.empty().obs;
 
   @override
   void onInit() async {
     super.onInit();
     keyword.addListener(() => refreshData.toggle());
-    ever(classController.allClasses, (_) async {
-      classSelected.value = classController.allClasses[0];
-    });
-
-
+    final courses = await classController.getAllClasses();
+    allClasses.addAll(courses);
+    classSelected.value = courses.first;
   }
 
   void setClassSelected(ClassModel value) {
     classSelected.value = value;
+  }
+
+  void onSearchBtn() async {
+    isLoading.value= true;
+    final questions = await questionRepository.searchQuestion(keyword.text.trim(), classSelected.value.id!, "DESC");
+    this.questions.assignAll(questions);
     refreshData.toggle();
+    isLoading.value= false;
   }
 
   Future<List<QuestionModel>> getSearchQuestion() async {

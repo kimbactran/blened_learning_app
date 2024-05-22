@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
       theme: LAppTheme.lightTheme,
       darkTheme: LAppTheme.darkTheme,
       initialBinding: GeneralBindings(),
+      debugShowCheckedModeBanner: false
     );
   }
 }

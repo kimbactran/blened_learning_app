@@ -7,12 +7,13 @@ class LProfileMenu extends StatelessWidget {
     this.icon = Iconsax.arrow_right_34,
     required this.onPressed,
     required this.title,
-    required this.value,
+    required this.value, this.showIcon = true,
   });
 
   final IconData icon;
   final VoidCallback onPressed;
   final String title, value;
+  final bool showIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +34,7 @@ class LProfileMenu extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
         ),
+        if(showIcon)
         Icon(icon, size: 18),
       ],
     );

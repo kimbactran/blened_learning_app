@@ -2,7 +2,6 @@ import 'package:blended_learning_appmb/data/repositories/answer/answer_repositor
 import 'package:blended_learning_appmb/data/repositories/class/class_repository.dart';
 import 'package:blended_learning_appmb/data/repositories/question/question_repository.dart';
 import 'package:blended_learning_appmb/data/repositories/tag_repository/tag_repository.dart';
-import 'package:blended_learning_appmb/features/personalization/models/user_model.dart';
 import 'package:blended_learning_appmb/features/question/models/answer_model.dart';
 import 'package:blended_learning_appmb/features/question/models/tag_model.dart';
 import 'package:get/get.dart';
@@ -62,9 +61,12 @@ class ReportController extends GetxController{
         int numAnswers = 0;
         int numLike = 0;
         int numDislike = 0;
+        
         for (var question in questions.toList()) {
           if (question.user?.id == user.id) {
             numQuestions = numQuestions + 1;
+            numLike = numLike + question.numUpVote!;
+            numDislike = numDislike + question.numDownVote!;
             questions.remove(question);
           }
         }
@@ -72,6 +74,8 @@ class ReportController extends GetxController{
         for (var answer in answers.toList()) {
           if (answer.user?.id == user.id) {
             numAnswers = numAnswers + 1;
+            numLike = numLike + answer.numUpVote!;
+            numDislike = numDislike + answer.numDownVote!;
             answers.remove(answer);
           }
         }

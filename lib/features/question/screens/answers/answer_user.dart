@@ -3,13 +3,11 @@ import 'package:blended_learning_appmb/common/widgets/appbar/appbar.dart';
 import 'package:blended_learning_appmb/features/question/controllers/answer_controller.dart';
 import 'package:blended_learning_appmb/features/question/controllers/question_controller.dart';
 import 'package:blended_learning_appmb/features/question/screens/answers/edit_answer_screen.dart';
-import 'package:blended_learning_appmb/features/question/screens/q&a/question_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/helpers/cloud_helper_functions.dart';
-import '../../models/question_model.dart';
 
 class AnswerOfUserScreen extends StatelessWidget {
   const AnswerOfUserScreen({super.key});

@@ -1,11 +1,8 @@
 import 'package:blended_learning_appmb/common/widgets/appbar/appbar.dart';
 import 'package:blended_learning_appmb/features/question/controllers/edit_answer_controller.dart';
 import 'package:blended_learning_appmb/features/question/models/answer_model.dart';
-import 'package:blended_learning_appmb/features/question/models/question_model.dart';
-import 'package:blended_learning_appmb/features/question/screens/answers/answer_area.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:quill_html_editor/quill_html_editor.dart';
 

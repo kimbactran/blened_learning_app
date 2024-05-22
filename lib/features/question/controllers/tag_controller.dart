@@ -22,7 +22,6 @@ class TagController extends GetxController {
 
   @override
   void onInit() async {
-
     super.onInit;
   }
 
@@ -57,23 +56,33 @@ class TagController extends GetxController {
   }
 
   TagModel tagNode(String classId, List<TagModel> tags) {
-    return tags.firstWhere((tag) => tag.id == classId, orElse: () => TagModel.empty());
+    return tags.firstWhere((tag) => tag.id == classId,
+        orElse: () => TagModel.empty());
   }
 
   TreeNode buildNode(TagModel tagNode, List<TagModel> tags) {
     return TreeNode(
-        content: Expanded(child: Text(tagNode.tag!, maxLines: 2,)),
-        children: tags.where((tag) => tag.parentId == tagNode.id).map((tag) => buildNode(tag, tags)).toList()
-    );
+        content: Expanded(
+            child: Text(
+          tagNode.tag!,
+          maxLines: 2,
+        )),
+        children: tags
+            .where((tag) => tag.parentId == tagNode.id)
+            .map((tag) => buildNode(tag, tags))
+            .toList());
   }
 
-  bool isSelectedTag(TagModel tag) {
-    return selectedTags.contains(tag);
+  bool isSelectedTag(TagModel tagCheck) {
+    if (selectedTags.any((tag) => tag.id == tagCheck.id)) {
+      return true;
+    }
+    return false;
   }
 
   Future addNewTag(String classId) async {
     try {
-      if(tag.text.trim().isEmpty || tag.text.trim().trim().isEmpty) {
+      if (tag.text.trim().isEmpty || tag.text.trim().trim().isEmpty) {
         LLoader.customToast(message: "Please enter the tag name!");
       } else {
         List<String> tags = [];
@@ -81,7 +90,9 @@ class TagController extends GetxController {
         await tagRepository.addNewFreeTag(classId, tags);
         refreshData.toggle();
 
-        LLoader.successSnackBar(title: "Add Tag Success", message: "Let's add some question with new tag");
+        LLoader.successSnackBar(
+            title: "Add Tag Success",
+            message: "Let's add some question with new tag");
         tag.clear();
       }
     } catch (e) {

@@ -1,19 +1,23 @@
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:blended_learning_appmb/data/repositories/class/class_repository.dart';
 import 'package:blended_learning_appmb/features/question/models/class_model.dart';
 import 'package:blended_learning_appmb/features/question/models/question_model.dart';
 import 'package:blended_learning_appmb/features/question/models/tag_model.dart';
 import 'package:blended_learning_appmb/utils/http/api.dart';
 import 'package:blended_learning_appmb/utils/http/http_client.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 class QuestionRepository extends GetxController {
   static QuestionRepository get instance => Get.find();
 
   // Variable
   final deviceStorage = GetStorage();
+  final _db = FirebaseFirestore.instance;
 
   Future<List<QuestionModel>> getQuestionInClass(String classId) async {
     try {
@@ -23,7 +27,8 @@ class QuestionRepository extends GetxController {
       if (response.statusCode == 200) {
         List jsonList = jsonDecode(response.body);
         return jsonList
-            .map((question) => QuestionModel.fromJsonWithClass(question, classId))
+            .map((question) =>
+                QuestionModel.fromJsonWithClass(question, classId))
             .toList();
       } else {
         throw Exception('Failed to load data ${response.statusCode}');
@@ -34,7 +39,8 @@ class QuestionRepository extends GetxController {
     }
   }
 
-  Future<List<QuestionModel>> getQuestionInClassWithSort(String classId, String sort) async {
+  Future<List<QuestionModel>> getQuestionInClassWithSort(
+      String classId, String sort) async {
     try {
       String token = deviceStorage.read('Token');
       var endpoint = LApi.postApi.postInClassroom + '/${classId}?order=${sort}';
@@ -42,7 +48,8 @@ class QuestionRepository extends GetxController {
       if (response.statusCode == 200) {
         List jsonList = jsonDecode(response.body);
         return jsonList
-            .map((question) => QuestionModel.fromJsonWithClass(question, classId))
+            .map((question) =>
+                QuestionModel.fromJsonWithClass(question, classId))
             .toList();
       } else {
         throw Exception('Failed to load data ${response.statusCode}');
@@ -98,7 +105,8 @@ class QuestionRepository extends GetxController {
         // Lấy lớp
         List<QuestionModel> questions = await getQuestionInClass(course.id!);
         questions.forEach((question) {
-          if (question.tags != null && question.tags!.any((tagCheck) => tagCheck.tag == tag.tag)) {
+          if (question.tags != null &&
+              question.tags!.any((tagCheck) => tagCheck.tag == tag.tag)) {
             allQuestions.add(question);
           }
         });
@@ -115,12 +123,13 @@ class QuestionRepository extends GetxController {
     try {
       List<QuestionModel> allQuestions = [];
 
-        List<QuestionModel> questions = await getQuestionInClass(classId);
-        questions.forEach((question) {
-          if (question.tags != null && question.tags!.any((tagCheck) => tagCheck.tag == tag.tag)) {
-            allQuestions.add(question);
-          }
-        });
+      List<QuestionModel> questions = await getQuestionInClass(classId);
+      questions.forEach((question) {
+        if (question.tags != null &&
+            question.tags!.any((tagCheck) => tagCheck.tag == tag.tag)) {
+          allQuestions.add(question);
+        }
+      });
 
       return allQuestions;
     } catch (e) {
@@ -155,14 +164,15 @@ class QuestionRepository extends GetxController {
     }
   }
 
-  Future<bool> addQuestion(
-      String title, String content, String classroomId, List<String> tagIds) async {
+  Future<bool> addQuestion(String title, String content, String classroomId,
+      List<String> tagIds) async {
     try {
       Map body = {
         'title': title,
         'content': content,
         'classroomId': classroomId,
-        'tagIds': tagIds
+        'tagIds': tagIds,
+        'image_url': '',
       };
       String token = deviceStorage.read('Token');
       var endpoint = LApi.postApi.post;
@@ -179,8 +189,8 @@ class QuestionRepository extends GetxController {
     }
   }
 
-  Future<bool> editQuestion(String postId,
-      String title, String content, String classroomId, List<String> tagIds) async {
+  Future<bool> editQuestion(String postId, String title, String content,
+      String classroomId, List<String> tagIds) async {
     try {
       Map body = {
         'title': title,
@@ -206,16 +216,16 @@ class QuestionRepository extends GetxController {
   Future<List<QuestionModel>> searchQuestion(
       String keySearch, String classId, String order) async {
     try {
-
       String token = deviceStorage.read('Token');
-      var endpoint = LApi.postApi.postInClassroom + '/${classId}?keySearch=${keySearch}&order=${order}';
+      var endpoint = LApi.postApi.postInClassroom +
+          '/${classId}?keySearch=${keySearch}&order=${order}';
       var response = await LHttpHelper.get(endpoint, token);
       if (response.statusCode == 200) {
         List jsonList = jsonDecode(response.body);
         return jsonList
-            .map((question) => QuestionModel.fromJsonWithClass(question, classId))
+            .map((question) =>
+                QuestionModel.fromJsonWithClass(question, classId))
             .toList();
-
       } else {
         throw Exception('Failed to load data ${response.statusCode}');
       }
@@ -230,7 +240,7 @@ class QuestionRepository extends GetxController {
       String token = deviceStorage.read('Token');
       var endpoint = LApi.postApi.votePost + '/${question.id}';
       Map body = {
-        'isUpVote' : status,
+        'isUpVote': status,
       };
       var response = await LHttpHelper.put(endpoint, body, token);
       if (response.statusCode == 200) {
@@ -248,7 +258,7 @@ class QuestionRepository extends GetxController {
     try {
       String token = deviceStorage.read('Token');
       Map body = {
-        'isDownVote' : status,
+        'isDownVote': status,
       };
       var endpoint = LApi.postApi.votePost + '/${question.id}';
       var response = await LHttpHelper.put(endpoint, body, token);
@@ -300,14 +310,25 @@ class QuestionRepository extends GetxController {
       String token = deviceStorage.read('Token');
       var endpoint = LApi.postApi.post + '/${questionId}';
       var response = await LHttpHelper.delete(endpoint, token);
-      if(response.statusCode == 200){
-
+      if (response.statusCode == 200) {
       } else {
         throw Exception('Failed to delete ${response.statusCode}');
       }
-
     } catch (e) {
       final message = e.toString();
       throw '$message. Please try again!';
+    }
   }
-}}
+
+  Future<String> uploadImage(String path, XFile image) async {
+    try {
+      final ref = FirebaseStorage.instance.ref(path).child(image.name);
+      await ref.putFile(File(image.path));
+      final url = await ref.getDownloadURL();
+      return url;
+    } catch (e) {
+      final message = e.toString();
+      throw '$message. Please try again!';
+    }
+  }
+}

@@ -1,13 +1,10 @@
 import 'package:blended_learning_appmb/common/widgets/custom_shapes/containers/circular_container.dart';
 import 'package:blended_learning_appmb/common/widgets/custom_shapes/containers/rounded_container.dart';
 import 'package:blended_learning_appmb/common/widgets/image/rounded_image.dart';
-import 'package:blended_learning_appmb/features/question/controllers/class_controller.dart';
 import 'package:blended_learning_appmb/features/question/models/class_model.dart';
-import 'package:blended_learning_appmb/features/question/screens/classes/classes_details.dart';
 import 'package:blended_learning_appmb/utils/constants/image_strings.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class LClassCard extends StatelessWidget {
   const LClassCard(

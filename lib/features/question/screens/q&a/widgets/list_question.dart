@@ -1,9 +1,7 @@
 import 'package:blended_learning_appmb/common/widgets/appbar/appbar.dart';
-import 'package:blended_learning_appmb/features/question/controllers/class_controller.dart';
 import 'package:blended_learning_appmb/features/question/controllers/question_controller.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../../../../../common/widgets/question/question_card.dart';
 import '../../../../../utils/helpers/cloud_helper_functions.dart';

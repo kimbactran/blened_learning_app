@@ -15,64 +15,70 @@ class SearchQuestionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final searchController = Get.put(SearchQuestionController());
-    final classController = ClassController.instance;
+    //searchController.classSelected.value = classController.allClasses[0];
+
     return Scaffold(
-      appBar: LAppBar(title: Text("Search Question"), showBackArrow: true,),
+      appBar: const LAppBar(title: Text("Search Question"), showBackArrow: true,),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: LSizes.spaceBtwInputFields,
-            ),
-            TextFormField(
-              controller: searchController.keyword,
-              decoration: const InputDecoration(labelText: "Keyword"),
-            ),
+        child: Padding(
+          padding: const EdgeInsets.all(LSizes.sm),
+          child: Column(
+            children: [
+              const SizedBox(
+                height: LSizes.spaceBtwInputFields,
+              ),
+              TextFormField(
+                controller: searchController.keyword,
+                decoration: const InputDecoration(labelText: "Keyword"),
+              ),
 
-            const SizedBox(
-              height: LSizes.spaceBtwInputFields,
-            ),
-            DropdownButtonFormField<ClassModel>(
-              decoration: const InputDecoration(labelText: "Class"),
-              items: classController.allClasses
-                  .map((course) => DropdownMenuItem<ClassModel>(
-                  value: course, child: Text(course.title ?? "", style: Theme.of(context).textTheme.bodyMedium, maxLines: 1, overflow: TextOverflow.ellipsis,)))
-                  .toList(),
-              onChanged: (course) {
-                searchController.setClassSelected(course!);
-                searchController.getSearchQuestion();
-              },
-              value: classController.allClasses[0],),
-            const SizedBox(
-              height: LSizes.spaceBtwInputFields,
-            ),
+              const SizedBox(
+                height: LSizes.spaceBtwInputFields,
+              ),
+              Obx(
+                  () =>  DropdownButtonFormField<ClassModel>(
+                  decoration: const InputDecoration(labelText: "Class", hintText: "Select class"),
+                  items: searchController.allClasses
+                      .map((course) => DropdownMenuItem<ClassModel>(
+                      value: course,
+                      child: Text(course.title ?? "", style: Theme.of(context).textTheme.labelLarge, maxLines: 1, overflow: TextOverflow.ellipsis,)))
+                      .toList(),
+                  onChanged: (course) {
+                    searchController.setClassSelected(course!);
+                  },
+                  value: searchController.classSelected.value,),
+              ),
+              const SizedBox(
+                height: LSizes.spaceBtwInputFields,
+              ),
 
-            Obx(
-                () => FutureBuilder(
-                  key: Key(searchController.refreshData.value.toString()),
-                  future: searchController.getSearchQuestion(), builder: (context, snapshot){
-                final widget = LCloudHelperFunctions.checkSingleRecordState(snapshot);
-                if(widget != null) return widget;
-                // Data found
-              
-                final questions = snapshot.data;
+              ElevatedButton(
+                onPressed: () => searchController.onSearchBtn(),
+                child: const Text("Search"),
+              ),
+              const SizedBox(
+                height: LSizes.spaceBtwInputFields,
+              ),
+              Obx(() {
+                if(searchController.isLoading.value) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if(searchController.questions.isEmpty) {
+                  return const Center(child: Text("No question found!"));
+                }
                 return ListView.builder(
-                  itemCount: questions?.length,
+                  itemCount: searchController.questions.length,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (_, index) {
-                    //
-              
-              
-                    // return Text("đây là 1 câu hỏi");
-              
-                    return LQuestionCard(question: questions![index],);
-              
+                    //return Text("đây là 1 câu hỏi");
+                    return LQuestionCard(question: searchController.questions[index],);
                   },
-                );
-              }),
-            )
-          ],
+                );})
+            ],
+          ),
         ),
       ),
     );

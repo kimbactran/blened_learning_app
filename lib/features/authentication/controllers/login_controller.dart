@@ -1,7 +1,5 @@
 import 'package:blended_learning_appmb/common/widgets/loaders/loaders.dart';
 import 'package:blended_learning_appmb/data/repositories/authentication/authentication_repository.dart';
-import 'package:blended_learning_appmb/features/admin/adminPage.dart';
-import 'package:blended_learning_appmb/features/teacher/teacherPage.dart';
 import 'package:blended_learning_appmb/navigation_menu.dart';
 import 'package:blended_learning_appmb/navigation_menu_teacher.dart';
 import 'package:blended_learning_appmb/utils/constants/image_strings.dart';
@@ -9,7 +7,6 @@ import 'package:blended_learning_appmb/utils/popups/full_screen_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginController extends GetxController {
   static LoginController get instance => Get.find();
@@ -22,7 +19,6 @@ class LoginController extends GetxController {
   final email = TextEditingController();
   final password = TextEditingController();
   GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   Future<void> login() async {
     try {
@@ -49,9 +45,7 @@ class LoginController extends GetxController {
 
       final role = authenticationRepository.user.role;
       LFullScreenLoader.stopLoading();
-      if (role == 'ADMIN') {
-        Get.off(() => const AdminPage());
-      } else if (role == 'TEACHER') {
+      if (role == 'TEACHER') {
         Get.off(() => const NavigationTeacherMenu());
       } else if (role == 'STUDENT') {
         Get.off(() => const NavigationMenu());

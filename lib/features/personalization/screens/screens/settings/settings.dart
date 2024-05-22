@@ -6,7 +6,6 @@ import 'package:blended_learning_appmb/common/widgets/texts/section_heading.dart
 import 'package:blended_learning_appmb/data/repositories/authentication/authentication_repository.dart';
 import 'package:blended_learning_appmb/features/personalization/screens/screens/profile/profile.dart';
 import 'package:blended_learning_appmb/features/question/screens/answers/answer_user.dart';
-import 'package:blended_learning_appmb/features/question/screens/q&a/question_of_user.dart';
 import 'package:blended_learning_appmb/features/question/screens/q&a/widgets/list_question.dart';
 import 'package:blended_learning_appmb/utils/constants/colors.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';

@@ -33,18 +33,18 @@ class LUserProfileTile extends StatelessWidget {
         style: Theme.of(context)
             .textTheme
             .headlineSmall!
-            .apply(color: LColors.white),
+            .apply(color: LColors.black),
       ),
       subtitle: Text(
         user.email??"user@gmail.com",
         style:
-            Theme.of(context).textTheme.bodyMedium!.apply(color: LColors.white),
+            Theme.of(context).textTheme.bodyMedium!.apply(color: LColors.black),
       ),
       trailing: IconButton(
           onPressed: onPressed,
           icon: const Icon(
             Iconsax.edit,
-            color: LColors.white,
+            color: LColors.black,
           )),
     );
   }

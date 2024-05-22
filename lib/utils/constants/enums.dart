@@ -19,3 +19,5 @@ enum Role { admin, teacher, student }
 enum LikeStatus { none, like, dislike }
 
 enum MenuOption {edit, delete}
+
+enum MenuClassOption {manageUser}

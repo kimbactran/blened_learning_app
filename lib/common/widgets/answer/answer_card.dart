@@ -1,3 +1,4 @@
+import 'package:blended_learning_appmb/common/widgets/question/vote_answer_widget.dart';
 import 'package:blended_learning_appmb/common/widgets/user_card/user_card_question.dart';
 import 'package:blended_learning_appmb/features/question/controllers/answer_controller.dart';
 import 'package:blended_learning_appmb/features/question/models/answer_model.dart';
@@ -5,14 +6,10 @@ import 'package:blended_learning_appmb/features/question/screens/answers/answer_
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 import '../custom_shapes/containers/rounded_container.dart';
-import '../question/dislike_btn.dart';
-import '../question/like_btn.dart';
-import '../question/vote_widget.dart';
 
 class LAnswerCard extends StatelessWidget {
   const LAnswerCard({
@@ -54,10 +51,9 @@ class LAnswerCard extends StatelessWidget {
             ),
             // Action qu
             if(isShowVoteAction)
-            VoteWidget(isUpVote: answer.isUpVote!,
-                isDownVote: answer.isDownVote!,
-                numUpVote: answer.numUpVote!,
-                numDownVote: answer.numDownVote!),
+            VoteAnswerWidget(
+                answer: answer,
+                ),
 
             const SizedBox(
               height: LSizes.spaceBtwItems / 2,
@@ -73,7 +69,7 @@ class LAnswerCard extends StatelessWidget {
                    num = answers?.length;
                   return Row(
                     children: [
-                      Icon(Iconsax.arrow_down_2),
+                      const Icon(Iconsax.arrow_down_2),
                       Text("Show $num answer"),
                     ],
                   );

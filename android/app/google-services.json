@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "976838111237",
+    "project_id": "blended-learning-app-15f2c",
+    "storage_bucket": "blended-learning-app-15f2c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:976838111237:android:787a00b53e637b74a72c6c",
+        "android_client_info": {
+          "package_name": "com.example.blended_learning_appmb"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7Gyse8Scxf9ZX7bBY0TByzk5CdOLJmUA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

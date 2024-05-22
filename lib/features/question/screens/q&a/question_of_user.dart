@@ -1,14 +1,11 @@
 import 'package:blended_learning_appmb/common/widgets/appbar/appbar.dart';
-import 'package:blended_learning_appmb/features/question/controllers/class_controller.dart';
 import 'package:blended_learning_appmb/features/question/controllers/question_controller.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../common/widgets/question/question_card.dart';
-import '../../../../utils/constants/colors.dart';
 import '../../../../utils/helpers/cloud_helper_functions.dart';
-import '../../models/class_model.dart';
 
 class QuestionOfUser extends StatelessWidget {
   const QuestionOfUser({super.key});
@@ -16,7 +13,7 @@ class QuestionOfUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final questionController = QuestionController.instance;
+    final questionController = Get.put(QuestionController());
     return Scaffold(
       appBar: LAppBar(
         title: Text("My Questions",

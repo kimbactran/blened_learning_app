@@ -41,8 +41,8 @@ class AnswerController extends GetxController {
       final answersOfPost =  answers.where((answer) => answer.parentId == null).toList();
       return answersOfPost.length;
     } catch (e) {
-      return 0;
       LLoader.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      return 0;
     }
   }
 

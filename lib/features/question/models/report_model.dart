@@ -1,5 +1,4 @@
 import 'package:blended_learning_appmb/features/question/models/class_model.dart';
-import 'package:blended_learning_appmb/features/question/models/class_model.dart';
 import 'package:blended_learning_appmb/features/question/models/tag_report_model.dart';
 import 'package:blended_learning_appmb/features/question/models/user_attribute.dart';
 

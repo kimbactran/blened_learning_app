@@ -6,10 +6,7 @@ import 'package:blended_learning_appmb/features/question/screens/report/widgets/
 import 'package:blended_learning_appmb/features/question/screens/report/widgets/tag_report_table.dart';
 import 'package:blended_learning_appmb/features/question/screens/report/widgets/user_attribute_table.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
-import 'package:blended_learning_appmb/utils/helpers/helper_functions.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../../utils/helpers/cloud_helper_functions.dart';

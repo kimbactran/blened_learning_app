@@ -5,16 +5,13 @@ import 'package:blended_learning_appmb/features/question/controllers/class_contr
 import 'package:blended_learning_appmb/features/question/models/class_model.dart';
 import 'package:blended_learning_appmb/features/question/models/question_model.dart';
 import 'package:blended_learning_appmb/features/question/models/tag_model.dart';
-import 'package:blended_learning_appmb/utils/constants/enums.dart';
-import 'package:quill_html_converter/quill_html_converter.dart';
-
 import 'package:blended_learning_appmb/utils/popups/full_screen_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:quill_html_converter/quill_html_converter.dart';
 
 import 'package:get/get.dart';
+import 'package:quill_html_editor/quill_html_editor.dart';
 
 import '../models/answer_model.dart';
 
@@ -29,14 +26,17 @@ class QuestionController extends GetxController {
   final isDownVote = false.obs;
   final numUpVote = 0.obs;
   final numDownVote = 0.obs;
+  List<ClassModel> allClasses = <ClassModel>[].obs;
   RxBool refreshData = true.obs;
   TextEditingController questionText = TextEditingController();
+
   TextEditingController commentText = TextEditingController();
 
   final classController = ClassController.instance;
   final answerRepository = AnswerRepository.instance;
   final questionRepository = QuestionRepository.instance;
   QuillController quillController = QuillController.basic();
+  final QuillEditorController controller = QuillEditorController();
 
 
   final comments = <String>[].obs;
@@ -47,14 +47,20 @@ class QuestionController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    isLoading.value = true;
+    final courses = await classController.getAllClasses();
+    if (courses.isNotEmpty) {
+      allClasses.addAll(courses);
+      classSelected.value = courses.first;
+      tags.assignAll(await questionRepository.getAllTags(allClasses));
+    }
+
     ever(classController.allClasses, (_) async {
-      tags.assignAll(
-          await questionRepository.getAllTags(classController.allClasses));
-      classSelected.value = classController.allClasses[0];
+      if (classController.allClasses.isNotEmpty) {
+        classSelected.value = classController.allClasses[0];
+      }
     });
-    isLoading.value = false;
   }
+
   Future<List<QuestionModel>> getQuestionByUser() async {
     try {
       final questions = await questionRepository.getQuestionByUser(classController.allClasses);
@@ -94,20 +100,17 @@ class QuestionController extends GetxController {
       //LFullScreenLoader.openLoadingDialog(
           //'Loading...', LImages.loaderAnimation);
       if(title.text.trim().isEmpty || title.text.trim().trim().isEmpty ||
-          quillController.document.toPlainText().trim().isEmpty
-      || quillController.document.toPlainText().trim().trim().isEmpty|| tagIds.isEmpty) {
+          tagIds.isEmpty) {
         LLoader.customToast(message: "Please enter full the title, description and tags!" );
       } else {
-        String content = quillController.document.toDelta().toHtml();
+        String? htmlText = await controller.getText();
         bool result =
-        await questionRepository.addQuestion(title.text.trim(), content, classroomId, tagIds);
+        await questionRepository.addQuestion(title.text.trim(), htmlText, classroomId, tagIds);
         if (result) {
           Get.back();
           LLoader.successSnackBar(title: "Create question successfully", message: "Let's check answer");
           refreshData.toggle();
-          quillController.clear();
-          quillController.dispose();
-          quillController = QuillController.basic();
+          controller.clear();
           title.clear();
         } else {
           LFullScreenLoader.stopLoading();
@@ -127,16 +130,15 @@ class QuestionController extends GetxController {
     questionText.dispose();
     super.onClose();
   }
-
   void likeQuestion(QuestionModel question) async {
     isUpVote.value = !isUpVote.value;
     if(isUpVote.value && isDownVote.value) {
       isDownVote.value = !isDownVote.value;
     }
-      await questionRepository.likeQuestion(question, isUpVote.value);
-      final questionUpdate = await questionRepository.getQuestionDetail(question.id!);
-      numUpVote.value = questionUpdate.numUpVote!;
-      numDownVote.value = questionUpdate.numDownVote!;
+    await questionRepository.likeQuestion(question, isUpVote.value);
+    final questionUpdate = await questionRepository.getQuestionDetail(question.id!);
+    numUpVote.value = questionUpdate.numUpVote!;
+    numDownVote.value = questionUpdate.numDownVote!;
   }
 
   void dislikeQuestion(QuestionModel question) async {
@@ -150,6 +152,7 @@ class QuestionController extends GetxController {
     numDownVote.value = questionUpdate.numDownVote!;
 
   }
+
 
   Future<List<QuestionModel>> getQuestionOfUser() async {
     try {

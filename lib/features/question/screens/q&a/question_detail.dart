@@ -2,9 +2,7 @@
 
 import 'package:blended_learning_appmb/common/widgets/answer/answer_card.dart';
 import 'package:blended_learning_appmb/common/widgets/appbar/appbar.dart';
-import 'package:blended_learning_appmb/common/widgets/loaders/loaders.dart';
-import 'package:blended_learning_appmb/common/widgets/question/dislike_btn.dart';
-import 'package:blended_learning_appmb/common/widgets/question/vote_widget.dart';
+import 'package:blended_learning_appmb/common/widgets/question/vote_question_widget.dart';
 import 'package:blended_learning_appmb/common/widgets/tag_card/tag_card.dart';
 import 'package:blended_learning_appmb/common/widgets/user_card/user_card_question.dart';
 import 'package:blended_learning_appmb/features/question/controllers/answer_controller.dart';
@@ -81,16 +79,9 @@ class QuestionDetailScreen extends StatelessWidget {
               const SizedBox(
                 height: LSizes.spaceBtwItems,
               ),
-               Obx(
-                 () => VoteWidget(isUpVote: questionController.isUpVote.value,
-                     isDownVote: questionController.isDownVote.value,
-                     numUpVote: questionController.numUpVote.value,
-                     numDownVote: questionController.numDownVote.value,
-                     isUpVoteAction: () => questionController.likeQuestion(question),
-                     isDownVoteAction: () => questionController.dislikeQuestion(question))
-
-               ),
-
+               VoteQuestionWidget(
+                   question: question,
+                     ),
               const SizedBox(
                 height: LSizes.spaceBtwItems / 2,
               ),
@@ -109,8 +100,6 @@ class QuestionDetailScreen extends StatelessWidget {
                       // Data found
 
                       final answers = snapshot.data!;
-
-
 
                       return Column(
                         children: [

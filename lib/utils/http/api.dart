@@ -1,11 +1,12 @@
 class LApi {
-  static const String baseUrl = 'http://192.168.1.6:3001';
+  static const String baseUrl = 'http://192.168.137.1:3001';
   static _AuthApi authApi = _AuthApi();
   static _UserApi userApi = _UserApi();
   static _ClassroomApi classroomApi = _ClassroomApi();
   static _PostApi postApi = _PostApi();
   static _CommentApi commentApi = _CommentApi();
   static _TagApi tagApi = _TagApi();
+  static _MessageApi messageApi = _MessageApi();
 }
 
 class _TagApi {
@@ -28,7 +29,7 @@ class _PostApi {
 class _ClassroomApi {
   final String classroom = '/v1/classrooms';
   final String removeUserInClassroom =
-      '/v1/classrooms/remove-users-in-classroom';
+      '/v1/classrooms/remove-user-in-classroom';
   final String addUserInClassroom = '/v1/classrooms/join-users';
   final String listClassroomOfUser = '/v1/classrooms/classrooms-by-user';
 }
@@ -44,4 +45,8 @@ class _AuthApi {
   final String loginAuth = '/v1/auth/login';
   final String registerAuth = '/v1/auth/register';
   final String getInfoAuth = '/v1/auth/me';
+}
+
+class _MessageApi {
+  final String message = '/v1/message';
 }

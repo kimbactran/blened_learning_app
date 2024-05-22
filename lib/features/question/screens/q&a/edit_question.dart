@@ -1,8 +1,6 @@
-import 'dart:convert';
 
 import 'package:blended_learning_appmb/features/question/controllers/edit_question_controller.dart';
 import 'package:blended_learning_appmb/features/question/models/question_model.dart';
-import 'package:blended_learning_appmb/utils/helpers/html_to_delta_converter.dart';
 import 'package:blended_learning_appmb/utils/helpers/permission_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -25,11 +23,32 @@ class EditQuestionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final editQuestionController = Get.put(EditQuestionController());
     final tagController = Get.put(TagController());
+    final customToolBarList = [
+      ToolBarStyle.bold,
+      ToolBarStyle.italic,
+      ToolBarStyle.underline,
+      ToolBarStyle.strike,
+      ToolBarStyle.blockQuote,
+      ToolBarStyle.codeBlock,
+      ToolBarStyle.indentAdd,
+      ToolBarStyle.indentMinus,
+      ToolBarStyle.headerOne,
+      ToolBarStyle.headerTwo,
+      ToolBarStyle.color,
+      ToolBarStyle.align,
+      ToolBarStyle.listBullet,
+      ToolBarStyle.listOrdered,
+      ToolBarStyle.size,
+      ToolBarStyle.link,
+      ToolBarStyle.video,
+      ToolBarStyle.clean,
+      ToolBarStyle.clearHistory,
+      ToolBarStyle.undo,
+      ToolBarStyle.redo,
+      ToolBarStyle.addTable,
+      ToolBarStyle.editTable,
+    ];
     editQuestionController.title.text = question.title!;
-    //final jsonContent = jsonDecode(question.content!);
-    //editQuestionController.quillController.document = Document.fromJson(jsonContent);
-
-    var delta = HtmlToDeltaConverter.htmlToDelta(question.content!);
     editQuestionController.quillController.document = Document()..insert(0, question.content!);
     editQuestionController.tags.assignAll(question.tags!);
     tagController.selectedTags.assignAll(question.tags!);
@@ -85,7 +104,8 @@ class EditQuestionScreen extends StatelessWidget {
                                   () => Wrap(
                                 spacing: LSizes.defaultSpace,
                                 children: tagController.selectedTags
-                                    .map((tag) => LTagCard(tag: tag, showCancelBtn: true, maxline: 1, onCancel: () => tagController.removeTagFromSelected(tag),))
+                                    .map((tag) => LTagCard(tag: tag, showCancelBtn: true, maxline: 1,
+                                  onCancel: () => tagController.removeTagFromSelected(tag),))
                                     .toList(),
                               ),
                             ),
@@ -111,8 +131,9 @@ class EditQuestionScreen extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,),
                 ToolBar(
-                  toolBarColor: Colors.cyan.shade50,
-                  activeIconColor: Colors.green,
+                  toolBarColor: LColors.primary1,
+                  toolBarConfig: customToolBarList,
+                  activeIconColor: LColors.secondary1,
                   padding: const EdgeInsets.all(8),
                   iconSize: 25,
                   controller: editQuestionController.controller,

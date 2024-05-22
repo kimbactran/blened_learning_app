@@ -1,11 +1,9 @@
-import 'package:blended_learning_appmb/common/widgets/image/rounded_image.dart';
 import 'package:blended_learning_appmb/common/widgets/question/question_action.dart';
 import 'package:blended_learning_appmb/common/widgets/tag_card/tag_card.dart';
 import 'package:blended_learning_appmb/common/widgets/user_card/user_card_question.dart';
 import 'package:blended_learning_appmb/features/question/models/question_model.dart';
 import 'package:blended_learning_appmb/features/question/screens/q&a/edit_question.dart';
 import 'package:blended_learning_appmb/features/question/screens/q&a/question_detail.dart';
-import 'package:blended_learning_appmb/utils/constants/image_strings.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
