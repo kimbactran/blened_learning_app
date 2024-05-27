@@ -35,7 +35,6 @@ class EcoQuillText extends StatelessWidget {
           child: QuillEditor.basic(
             configurations: QuillEditorConfigurations(
               controller: questionController.quillController,
-              readOnly: false,
               sharedConfigurations: const QuillSharedConfigurations(
                 locale: Locale('en'),
               ),
