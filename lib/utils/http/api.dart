@@ -1,12 +1,12 @@
 class LApi {
-  static const String baseUrl = 'http://192.168.137.1:3001';
+  static const String baseUrl = 'http://192.168.2.114:3001';
   static _AuthApi authApi = _AuthApi();
   static _UserApi userApi = _UserApi();
   static _ClassroomApi classroomApi = _ClassroomApi();
   static _PostApi postApi = _PostApi();
   static _CommentApi commentApi = _CommentApi();
-  static _TagApi tagApi = _TagApi();
   static _MessageApi messageApi = _MessageApi();
+  static _TagApi tagApi = _TagApi();
 }
 
 class _TagApi {
