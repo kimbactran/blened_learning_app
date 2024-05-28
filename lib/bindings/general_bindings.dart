@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 
 import '../data/repositories/answer/answer_repository.dart';
 import '../data/repositories/authentication/authentication_repository.dart';
-import '../features/question/controllers/question_controller.dart';
 import '../features/question/controllers/tag_controller.dart';
 
 class GeneralBindings extends Bindings {

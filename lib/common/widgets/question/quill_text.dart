@@ -13,14 +13,14 @@ class EcoQuillText extends StatelessWidget {
     return SafeArea(
         child: Column(
       children: [
-        QuillToolbar.simple(
-          configurations: QuillSimpleToolbarConfigurations(
-            controller: questionController.quillController,
-            sharedConfigurations: const QuillSharedConfigurations(
-              locale: Locale('en'),
-            ),
-          ),
-        ),
+        // QuillToolbar.simple(
+        //   configurations: QuillSimpleToolbarConfigurations(
+        //     controller: questionController.quillController,
+        //     sharedConfigurations: const QuillSharedConfigurations(
+        //       locale: Locale('en'),
+        //     ),
+        //   ),
+        // ),
         const SizedBox(
           height: LSizes.spaceBtwInputFields,
         ),
@@ -32,14 +32,14 @@ class EcoQuillText extends StatelessWidget {
             ),
           ),
           height: 200,
-          child: QuillEditor.basic(
-            configurations: QuillEditorConfigurations(
-              controller: questionController.quillController,
-              sharedConfigurations: const QuillSharedConfigurations(
-                locale: Locale('en'),
-              ),
-            ),
-          ),
+          // child: QuillEditor.basic(
+          //   configurations: QuillEditorConfigurations(
+          //     controller: questionController.quillController,
+          //     sharedConfigurations: const QuillSharedConfigurations(
+          //       locale: Locale('en'),
+          //     ),
+          //   ),
+          // ),
         ),
       ],
     ));

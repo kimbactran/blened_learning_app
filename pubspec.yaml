@@ -73,7 +73,7 @@ dependencies:
   image_picker: ^1.1.1
   open_filex: ^4.4.0
   dash_chat_2: ^0.0.20
-  flutter_quill: ^9.3.11
+  flutter_quill: ^8.4.3
 
 dev_dependencies:
   flutter_test:
