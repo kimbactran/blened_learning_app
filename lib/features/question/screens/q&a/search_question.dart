@@ -1,12 +1,10 @@
 import 'package:blended_learning_appmb/common/widgets/appbar/appbar.dart';
-import 'package:blended_learning_appmb/features/question/controllers/class_controller.dart';
 import 'package:blended_learning_appmb/features/question/controllers/search_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../common/widgets/question/question_card.dart';
 import '../../../../utils/constants/sizes.dart';
-import '../../../../utils/helpers/cloud_helper_functions.dart';
 import '../../models/class_model.dart';
 
 class SearchQuestionScreen extends StatelessWidget {
@@ -18,7 +16,10 @@ class SearchQuestionScreen extends StatelessWidget {
     //searchController.classSelected.value = classController.allClasses[0];
 
     return Scaffold(
-      appBar: const LAppBar(title: Text("Search Question"), showBackArrow: true,),
+      appBar: const LAppBar(
+        title: Text("Search Question"),
+        showBackArrow: true,
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(LSizes.sm),
@@ -31,27 +32,32 @@ class SearchQuestionScreen extends StatelessWidget {
                 controller: searchController.keyword,
                 decoration: const InputDecoration(labelText: "Keyword"),
               ),
-
               const SizedBox(
                 height: LSizes.spaceBtwInputFields,
               ),
               Obx(
-                  () =>  DropdownButtonFormField<ClassModel>(
-                  decoration: const InputDecoration(labelText: "Class", hintText: "Select class"),
+                () => DropdownButtonFormField<ClassModel>(
+                  decoration: const InputDecoration(
+                      labelText: "Class", hintText: "Select class"),
                   items: searchController.allClasses
                       .map((course) => DropdownMenuItem<ClassModel>(
-                      value: course,
-                      child: Text(course.title ?? "", style: Theme.of(context).textTheme.labelLarge, maxLines: 1, overflow: TextOverflow.ellipsis,)))
+                          value: course,
+                          child: Text(
+                            course.title ?? "",
+                            style: Theme.of(context).textTheme.labelLarge,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          )))
                       .toList(),
                   onChanged: (course) {
                     searchController.setClassSelected(course!);
                   },
-                  value: searchController.classSelected.value,),
+                  value: searchController.classSelected.value,
+                ),
               ),
               const SizedBox(
                 height: LSizes.spaceBtwInputFields,
               ),
-
               ElevatedButton(
                 onPressed: () => searchController.onSearchBtn(),
                 child: const Text("Search"),
@@ -60,12 +66,12 @@ class SearchQuestionScreen extends StatelessWidget {
                 height: LSizes.spaceBtwInputFields,
               ),
               Obx(() {
-                if(searchController.isLoading.value) {
+                if (searchController.isLoading.value) {
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
-                if(searchController.questions.isEmpty) {
+                if (searchController.questions.isEmpty) {
                   return const Center(child: Text("No question found!"));
                 }
                 return ListView.builder(
@@ -74,9 +80,12 @@ class SearchQuestionScreen extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (_, index) {
                     //return Text("đây là 1 câu hỏi");
-                    return LQuestionCard(question: searchController.questions[index],);
+                    return LQuestionCard(
+                      question: searchController.questions[index],
+                    );
                   },
-                );})
+                );
+              })
             ],
           ),
         ),

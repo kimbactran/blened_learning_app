@@ -1,10 +1,6 @@
-import 'dart:io';
-
 import 'package:blended_learning_appmb/features/question/controllers/add_question_controller.dart';
-import 'package:blended_learning_appmb/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 
 class AddImage extends StatelessWidget {
   const AddImage({super.key});
@@ -13,29 +9,33 @@ class AddImage extends StatelessWidget {
   Widget build(BuildContext context) {
     final addQuestionController = AddQuestionController.instance;
     return Column(
-          children: [
+      children: [
         Center(
-        child: IconButton(
-        icon: const Icon(Icons.add),
-      onPressed: () {
-        addQuestionController.chooseImage();
-      },
-    ),),
-            Obx(() {
-              if(addQuestionController.images.isEmpty) {
-                return Center(child: Text('No Image Selected'),);
-              }
-              return ListView.builder(
-                shrinkWrap: true,
-                itemBuilder: (_, index) {
-                  return Image(image: NetworkImage(addQuestionController.images[index]));
-              },
-                itemCount: addQuestionController.images.length,);
-            })
-
-          ],
-        );
-      /*Container(
+          child: IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              addQuestionController.chooseImage();
+            },
+          ),
+        ),
+        Obx(() {
+          if (addQuestionController.images.isEmpty) {
+            return const Center(
+              child: Text('No Image Selected'),
+            );
+          }
+          return ListView.builder(
+            shrinkWrap: true,
+            itemBuilder: (_, index) {
+              return Image(
+                  image: NetworkImage(addQuestionController.images[index]));
+            },
+            itemCount: addQuestionController.images.length,
+          );
+        })
+      ],
+    );
+    /*Container(
           width: LHelperFunctions.screenWidth() - 10,
           padding: const EdgeInsets.all(12),
           child: GridView.builder(
@@ -69,6 +69,5 @@ class AddImage extends StatelessWidget {
           );
             }),
         ),*/
-
   }
 }

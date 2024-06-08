@@ -1,13 +1,11 @@
 import 'package:blended_learning_appmb/common/widgets/appbar/appbar.dart';
 import 'package:blended_learning_appmb/common/widgets/user_card/user_card.dart';
-import 'package:blended_learning_appmb/data/repositories/authentication/authentication_repository.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 import '../../../../common/widgets/texts/section_heading.dart';
-import '../../../../utils/helpers/cloud_helper_functions.dart';
 import '../../../personalization/models/user_model.dart';
 import '../../../personalization/screens/screens/profile/widgets/profile_menu.dart';
 import '../chat/widgets/chats.dart';
@@ -18,9 +16,8 @@ class UserDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authenticationRepository = AuthenticationRepository.instance;
     return Scaffold(
-      appBar: LAppBar(
+      appBar: const LAppBar(
         title: Text("User Infomation"),
         showBackArrow: true,
       ),
@@ -36,7 +33,7 @@ class UserDetailScreen extends StatelessWidget {
                 children: [
                   Expanded(child: LUserCard(user: user)),
                   IconButton(
-                    icon: Icon(Iconsax.message),
+                    icon: const Icon(Iconsax.message),
                     onPressed: () => Get.to(() => ChatWithUser(
                           receiver: user,
                         )),

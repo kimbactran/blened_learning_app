@@ -6,7 +6,6 @@ import 'package:blended_learning_appmb/features/question/models/question_model.d
 import 'package:blended_learning_appmb/features/question/models/tag_model.dart';
 import 'package:blended_learning_appmb/utils/http/api.dart';
 import 'package:blended_learning_appmb/utils/http/http_client.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -17,8 +16,6 @@ class QuestionRepository extends GetxController {
 
   // Variable
   final deviceStorage = GetStorage();
-  final _db = FirebaseFirestore.instance;
-
   Future<List<QuestionModel>> getQuestionInClass(String classId) async {
     try {
       String token = deviceStorage.read('Token');

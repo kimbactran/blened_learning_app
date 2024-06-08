@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 import 'features/question/screens/chat/chat.dart';
-import 'features/question/screens/chat/widgets/chats.dart';
 
 class NavigationMenu extends StatelessWidget {
   const NavigationMenu({super.key});

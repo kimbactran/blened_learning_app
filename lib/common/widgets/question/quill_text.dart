@@ -1,15 +1,11 @@
-import 'package:blended_learning_appmb/features/question/controllers/question_controller.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart';
 
 class EcoQuillText extends StatelessWidget {
   const EcoQuillText({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final questionController = QuestionController.instance;
-
     return SafeArea(
         child: Column(
       children: [

@@ -6,11 +6,10 @@ import '../../../common/widgets/loaders/loaders.dart';
 import '../../../data/repositories/question/question_repository.dart';
 import '../models/answer_model.dart';
 import '../models/class_model.dart';
-import '../models/question_model.dart';
 import '../models/user_attribute.dart';
 import 'class_controller.dart';
 
-class RankController extends GetxController{
+class RankController extends GetxController {
   static RankController get instance => Get.find();
 
   List<ClassModel> allClasses = <ClassModel>[].obs;
@@ -31,14 +30,14 @@ class RankController extends GetxController{
     try {
       final questions = await questionRepository.getQuestionInClass(classId);
       List<AnswerModel> answers = [];
-      for(var question in questions) {
-
-        final answer = await answerRepository.getAnswerOfPost(question.id!, "", 'HIGH_SCORES');
+      for (var question in questions) {
+        final answer = await answerRepository.getAnswerOfPost(
+            question.id!, "", 'HIGH_SCORES');
         answers.addAll(answer);
       }
       List<UserAttributeModel> userAttributes = [];
       final users = await classRepository.getUserOfClass(classId);
-      for(var user in users) {
+      for (var user in users) {
         final UserAttributeModel userAttribute = UserAttributeModel.empty();
         userAttribute.user = user;
         int numQuestions = 0;
@@ -69,10 +68,13 @@ class RankController extends GetxController{
         userAttribute.numDislike = numDislike;
         userAttributes.add(userAttribute);
       }
-      userAttributes.sort((a, b) => (b.numQuestion! + b.numAnswer!).compareTo(a.numQuestion! + a.numAnswer!));
+      userAttributes.sort((a, b) => (b.numQuestion! + b.numAnswer!)
+          .compareTo(a.numQuestion! + a.numAnswer!));
       return userAttributes;
     } catch (e) {
-      LLoader.errorSnackBar(title: 'Oh Snap! Something went wrong while get user attribute.', message: e.toString());
+      LLoader.errorSnackBar(
+          title: 'Oh Snap! Something went wrong while get user attribute.',
+          message: e.toString());
       print(e.toString());
       return [];
     }

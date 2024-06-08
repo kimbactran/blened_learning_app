@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:blended_learning_appmb/features/question/controllers/question_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -25,13 +23,11 @@ class AddQuestionController extends GetxController {
   RxList<String> images = <String>[].obs;
   final picker = ImagePicker();
 
-
   final questionRepository = QuestionRepository.instance;
   final questionController = QuestionController.instance;
   final classController = ClassController.instance;
   final QuillEditorController controller = QuillEditorController();
   final _db = FirebaseFirestore.instance;
-
 
   @override
   void onInit() async {
@@ -39,27 +35,31 @@ class AddQuestionController extends GetxController {
     final courses = await classController.getAllClasses();
     allClasses.addAll(courses);
     classSelected.value = courses.first;
-    tags.assignAll(
-        await questionRepository.getAllTags(allClasses));
+    tags.assignAll(await questionRepository.getAllTags(allClasses));
   }
 
   void setClassSelected(ClassModel value) {
     classSelected.value = value;
   }
+
   Future<void> addQuestion(String classroomId, List<String> tagIds) async {
     try {
       //LFullScreenLoader.openLoadingDialog(
       //'Loading...', LImages.loaderAnimation);
-      if(title.text.trim().isEmpty || title.text.trim().trim().isEmpty ||
+      if (title.text.trim().isEmpty ||
+          title.text.trim().trim().isEmpty ||
           tagIds.isEmpty) {
-        LLoader.customToast(message: "Please enter full the title, description and tags!" );
+        LLoader.customToast(
+            message: "Please enter full the title, description and tags!");
       } else {
         String? htmlText = await controller.getText();
-        bool result =
-        await questionRepository.addQuestion(title.text.trim(), htmlText, classroomId, tagIds);
+        bool result = await questionRepository.addQuestion(
+            title.text.trim(), htmlText, classroomId, tagIds);
         if (result) {
           Get.back();
-          LLoader.successSnackBar(title: "Create question successfully", message: "Let's check answer");
+          LLoader.successSnackBar(
+              title: "Create question successfully",
+              message: "Let's check answer");
           questionController.refreshData.toggle();
           controller.clear();
           title.clear();
@@ -77,8 +77,9 @@ class AddQuestionController extends GetxController {
   }
 
   void chooseImage() async {
-    final image = await picker.pickImage(source: ImageSource.gallery, imageQuality: 70);
-    if(image != null) {
+    final image =
+        await picker.pickImage(source: ImageSource.gallery, imageQuality: 70);
+    if (image != null) {
       final imageUrl = await questionRepository.uploadImage('PostImg/', image);
       images.add(imageUrl);
     }

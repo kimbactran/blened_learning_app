@@ -1,7 +1,6 @@
 import 'package:blended_learning_appmb/common/widgets/appbar/appbar.dart';
 import 'package:blended_learning_appmb/common/widgets/custom_shapes/containers/rounded_container.dart';
 import 'package:blended_learning_appmb/data/repositories/authentication/authentication_repository.dart';
-import 'package:blended_learning_appmb/features/question/controllers/class_controller.dart';
 import 'package:blended_learning_appmb/features/question/controllers/tag_controller.dart';
 import 'package:blended_learning_appmb/features/question/models/class_model.dart';
 import 'package:blended_learning_appmb/features/question/screens/q&a/widgets/question_item.dart';
@@ -34,80 +33,78 @@ class ClassDetailScreen extends StatelessWidget {
             PopupMenuButton<MenuClassOption>(
               icon: const Icon(Icons.more_vert),
               itemBuilder: (BuildContext context) {
-
                 return <PopupMenuEntry<MenuClassOption>>[
                   const PopupMenuItem<MenuClassOption>(
                     value: MenuClassOption.manageUser,
                     child: Text('ManageUser'),
                   ),
-
                 ];
-
               },
               onSelected: (MenuClassOption result) {
                 if (result == MenuClassOption.manageUser) {
-                  Get.to(() => ListUserClass(course: course,));
+                  Get.to(() => ListUserClass(
+                        course: course,
+                      ));
                 }
               },
             ),
         ],
       ),
       body: SingleChildScrollView(
-        child:
-        Column(
+        child: Column(
           children: [
-             LQuestionItem(
+            LQuestionItem(
               showBorder: true,
               course: course,
             ),
             FutureBuilder(
-              future: tagController.getAllTags(course.id!),
+                future: tagController.getAllTags(course.id!),
+                builder: (context, snapshot) {
+                  final widget =
+                      LCloudHelperFunctions.checkSingleRecordState(snapshot);
+                  if (widget != null) return widget;
+                  // Data found
 
-              builder: (context, snapshot) {
-                final widget = LCloudHelperFunctions.checkSingleRecordState(snapshot);
-                if(widget != null) return widget;
-                // Data found
-
-                final tags = snapshot.data;
-                final syllabusTags =  tags!.where((tag) => tag.type == "SYLLABUS").toList();
-                final freeTags =  tags.where((tag) => tag.type == "FREE").toList();
-                return Column(
-                children: [
-
-                  Padding(
-                    padding: const EdgeInsets.all(LSizes.sm),
-                    child: LRoundedContainer(
-                      showBorder: true,
-                      child: TreeView(nodes: [
-                        tagController.buildNode(tagController.tagNode(course.id!, syllabusTags), syllabusTags)
-                      ]),
-
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(LSizes.sm),
-                    child: LRoundedContainer(
-                      showBorder: true,
-                      child: TreeView(nodes: [
-                        TreeNode(
-                          content: const Expanded(
-                            child: Text("Free Tag"),
-                          ),
-                          children:
-                                freeTags.map((tag) => TreeNode(content: Text(tag.tag!))).toList()
+                  final tags = snapshot.data;
+                  final syllabusTags =
+                      tags!.where((tag) => tag.type == "SYLLABUS").toList();
+                  final freeTags =
+                      tags.where((tag) => tag.type == "FREE").toList();
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(LSizes.sm),
+                        child: LRoundedContainer(
+                          showBorder: true,
+                          child: TreeView(nodes: [
+                            tagController.buildNode(
+                                tagController.tagNode(course.id!, syllabusTags),
+                                syllabusTags)
+                          ]),
                         ),
-                      ]),
-
-                    ),
-                  ),
-                ],
-              );}
-            ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(LSizes.sm),
+                        child: LRoundedContainer(
+                          showBorder: true,
+                          child: TreeView(nodes: [
+                            TreeNode(
+                                content: const Expanded(
+                                  child: Text("Free Tag"),
+                                ),
+                                children: freeTags
+                                    .map((tag) =>
+                                        TreeNode(content: Text(tag.tag!)))
+                                    .toList()),
+                          ]),
+                        ),
+                      ),
+                    ],
+                  );
+                }),
           ],
         ),
       ),
     );
   }
 }
-
-

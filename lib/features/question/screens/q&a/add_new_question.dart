@@ -1,11 +1,8 @@
 import 'package:blended_learning_appmb/common/widgets/appbar/appbar.dart';
 import 'package:blended_learning_appmb/common/widgets/tag_card/tag_card.dart';
 import 'package:blended_learning_appmb/features/question/controllers/add_question_controller.dart';
-import 'package:blended_learning_appmb/features/question/controllers/class_controller.dart';
-import 'package:blended_learning_appmb/features/question/controllers/question_controller.dart';
 import 'package:blended_learning_appmb/features/question/controllers/tag_controller.dart';
 import 'package:blended_learning_appmb/features/question/models/class_model.dart';
-import 'package:blended_learning_appmb/features/question/screens/q&a/widgets/add_image.dart';
 import 'package:blended_learning_appmb/features/question/screens/tag/tag.dart';
 import 'package:blended_learning_appmb/utils/constants/colors.dart';
 import 'package:blended_learning_appmb/utils/constants/sizes.dart';
@@ -148,7 +145,7 @@ class AddNewQuestionScreen extends StatelessWidget {
                 ),
                 //AddImage(),
                 //const SizedBox(
-                 //height: LSizes.spaceBtwInputFields,
+                //height: LSizes.spaceBtwInputFields,
                 //),
                 Text(
                   "Description",

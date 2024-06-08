@@ -5,7 +5,6 @@ import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../../utils/helpers/cloud_helper_functions.dart';
 import '../../../../personalization/models/user_model.dart';
 
 class ChatWithUser extends StatefulWidget {
@@ -21,12 +20,12 @@ class _BasicState extends State<ChatWithUser> {
   List<ChatMessage> messages = [];
   Timer? timer;
 
-
   @override
   void initState() {
     super.initState();
     _fetchMessages();
-    timer = Timer.periodic(Duration(seconds: 15), (Timer t) => _fetchMessages());
+    timer =
+        Timer.periodic(Duration(seconds: 15), (Timer t) => _fetchMessages());
   }
 
   @override
@@ -46,7 +45,6 @@ class _BasicState extends State<ChatWithUser> {
   @override
   Widget build(BuildContext context) {
     final chatController = Get.put(ChatController());
-
 
     return Scaffold(
       appBar: AppBar(

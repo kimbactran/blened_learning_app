@@ -50,8 +50,6 @@ class ChatRepository extends GetxController {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         final message = MessageModel.fromJson(data);
-        print(message.sendId);
-        print(message.receiverId);
         return message;
       } else {
         throw Exception('Failed to load data ${response.statusCode}');
